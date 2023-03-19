@@ -1,7 +1,10 @@
 package com.g31.demo.model;
 
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.Length;
 
+
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -12,10 +15,25 @@ import java.util.List;
 @Table(name = "user")
 @Entity
 public class User {
+    @SequenceGenerator(
+            name = "users_sequence",
+            sequenceName = "users_sequence",
+            allocationSize = 1
+    )
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "users_sequence"
+    )
     private long uid;  // primary key
+
+    @NotNull(message = "User name cannot be empty")
+    @Column(name = "user_name")
     private String username;
+
+    @NotNull(message = "Password cannot be empty")
+    @Length(min = 8, message = "Password should be at least 8 characters long")
+    @Column(name = "password")
     private String password;
     @OneToMany
     private List<User> friendList;
