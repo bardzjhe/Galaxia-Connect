@@ -14,5 +14,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
     User findByUsernameAndPassword(String username, String password);
-
+    User findUserByUid(long uid);
 }

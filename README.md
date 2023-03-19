@@ -13,7 +13,7 @@ Galaxia Connect means this program is designed to connect people interested in l
 2. **Create MySQL database**
 
    ```bash
-   create database gc_database
+   create database galaxia_connect_db
    ```
 3. **Change MySQL username and password as per your MySQL installation**
 

@@ -1,12 +1,13 @@
-package com.g31.demo.Service;
+package com.g31.demo.Service.impl;
 
+import com.g31.demo.Service.UserService;
 import com.g31.demo.model.User;
 import com.g31.demo.repository.UserRepository;
 
 /**
  * @Description:
  */
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 

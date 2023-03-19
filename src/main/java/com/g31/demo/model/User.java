@@ -2,6 +2,8 @@ package com.g31.demo.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 /**
  * @Description:
  */
@@ -15,6 +17,17 @@ public class User {
     private long uid;  // primary key
     private String username;
     private String password;
+    @OneToMany
+    private List<User> friendList;
+
+
+    public List<User> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(List<User> friendList) {
+        this.friendList = friendList;
+    }
 
     public long getUid() {
         return uid;
