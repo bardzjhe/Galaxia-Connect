@@ -14,6 +14,8 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long groupId;
+
+    @Column(name = "group_name")
     private String groupName;
     @OneToMany
     private List<User> members;

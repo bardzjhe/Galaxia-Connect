@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
-    void loadGroup();
+//    void loadGroup();
     Group getByGroupId(long groupId);
 }
