@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +42,9 @@ public class User implements UserDetails {
     @Length(min = 8, message = "Password should be at least 8 characters long")
     @Column(name = "password")
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @NotNull(message = "Email cannot be empty")
     @Email(message = "Please enter a valid email address")
@@ -110,7 +115,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
+        return Collections.singletonList(authority);
     }
 
     public String getPassword() {
@@ -121,5 +127,17 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public Role getRole() { return role; }
 
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
