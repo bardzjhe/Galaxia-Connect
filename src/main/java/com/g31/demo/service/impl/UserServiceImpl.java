@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void saveUser(User user) {
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        userRepository.save(user);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Optional<User> existingUserEmail = userRepository.findByEmail(user.getEmail());
         if(existingUserEmail.isPresent()){
             userExists = true;
-            message = "Mobile Number Already Present!";
+            message = "Email Already Present!";
         }
         System.out.println("existingUserEmail.isPresent() - "+existingUserEmail.isPresent());
         return Arrays.asList(userExists, message);

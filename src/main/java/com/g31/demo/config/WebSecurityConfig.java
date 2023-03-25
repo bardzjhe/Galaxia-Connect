@@ -16,22 +16,22 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
- * @Description: 这里的内容还需要改一改 因为spring最新版本是6
+ * @Description: Implements authentication and authorization.
  */
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity  // Spring Security
 public class WebSecurityConfig {
 
     @Autowired
     private LoginSuccessHandler successHandler;
 
-    @Bean
+    @Bean // loads user-specific data that is used for authentication.
     public UserDetailsService userDetailsService() {
         return new UserServiceImpl();
     }
 
-    @Bean
+    @Bean // encodes and validates passwords using the BCrypt algorithm.
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -41,51 +41,60 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+    /**
+     * @return an instance of DaoAuthenticationProvider configured to use the previously
+     * defined UserDetailsService() and PasswordEncoder() implementations.
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
+    /**
+     *
+     * @param http
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//
-//        http.authorizeRequests()
-//                // URL matching for accessibility
-//                .antMatchers("/", "/login", "/register").permitAll()
-//                .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
-//                .antMatchers("/account/**").hasAnyAuthority("USER")
-//                .anyRequest().authenticated()
-//                .and()
-//                // form login
-//                .csrf().disable().formLogin()
-//                .loginPage("/login")
-//                .failureUrl("/login?error=true")
-//                .successHandler(successHandler)
-//                .usernameParameter("email")
-//                .passwordParameter("password")
-//                .and()
-//                // logout
-//                .logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl("/")
-//                .and()
-//                .exceptionHandling()
-//                .accessDeniedPage("/access-denied");
-//
-//        http.authenticationProvider(authenticationProvider());
-//        http.headers().frameOptions().sameOrigin();
-//
-//        return http.build();
-//    }
+        http.authorizeHttpRequests()
+                // URL matching for accessibility
+                // All people can access
+                .requestMatchers( "/", "/register", "/login").permitAll()
+                // Only admin can access
+                .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                // Only user can access
+                .requestMatchers("/account/**").hasAnyAuthority("USER")
+                .anyRequest().authenticated();
+        // form login
+        http.csrf().disable().formLogin()
+                .loginPage("/login")
+                .failureUrl("/login?error=true")
+                .successHandler(successHandler)
+                .usernameParameter("email")
+                .passwordParameter("password").and();
+                // logout
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/")
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/access-denied");
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
-//    }
+        http.authenticationProvider(authenticationProvider());
+        http.headers().frameOptions().sameOrigin();
+        return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/images/**", "/js/**", "/webjars/**");
+    }
+
+
 
 }

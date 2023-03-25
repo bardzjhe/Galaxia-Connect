@@ -17,9 +17,18 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @Description:
+ * @Description: Our application will allow new users to register and login to our application.
+ * Every User will have only one role. The role associated with a user will be used in future to decide
+ * whether the user is authorized to access a particular resource on our server or not.
  */
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "user_name" // unique username
+        }),
+        @UniqueConstraint(columnNames = {
+                "email" // unique email
+        })
+})
 @Entity
 public class User implements UserDetails {
     @SequenceGenerator(
@@ -65,17 +74,17 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled = true;
 
-    @OneToMany
-    private List<User> friendList;
-
-
-    public List<User> getFriendList() {
-        return friendList;
-    }
-
-    public void setFriendList(List<User> friendList) {
-        this.friendList = friendList;
-    }
+//    @OneToMany
+//    private List<User> friendList;
+//
+//
+//    public List<User> getFriendList() {
+//        return friendList;
+//    }
+//
+//    public void setFriendList(List<User> friendList) {
+//        this.friendList = friendList;
+//    }
 
     public long getUid() {
         return uid;
