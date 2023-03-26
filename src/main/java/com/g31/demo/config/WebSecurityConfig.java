@@ -23,8 +23,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity  // Spring Security
 public class WebSecurityConfig {
 
-    @Autowired
-    private LoginSuccessHandler successHandler;
+//    @Autowired
+//    private LoginSuccessHandler successHandler;
 
     @Bean // loads user-specific data that is used for authentication.
     public UserDetailsService userDetailsService() {
@@ -61,23 +61,31 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests()
+//        http.authorizeHttpRequests(requests -> requests.requestMatchers("/").permitAll());
+//        http.authorizeHttpRequests(requests -> requests.requestMatchers("/register").permitAll());
+//        http.authorizeHttpRequests(requests -> requests.requestMatchers("/login").permitAll());
+//
+//        //Form login:
+//        http.formLogin(login -> login.loginPage("/logIn"));
+
+
+        http.authorizeRequests()
                 // URL matching for accessibility
                 // All people can access
-                .requestMatchers( "/", "/register", "/login").permitAll()
+                .antMatchers( "/", "/register", "/login").permitAll()
                 // Only admin can access
-                .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
                 // Only user can access
-                .requestMatchers("/account/**").hasAnyAuthority("USER")
+                .antMatchers("/account/**").hasAnyAuthority("USER")
                 .anyRequest().authenticated();
         // form login
         http.csrf().disable().formLogin()
                 .loginPage("/login")
                 .failureUrl("/login?error=true")
-                .successHandler(successHandler)
+//                .successHandler(successHandler)
                 .usernameParameter("email")
                 .passwordParameter("password").and();
-                // logout
+//        // logout
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/")
@@ -85,14 +93,16 @@ public class WebSecurityConfig {
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
 
+
         http.authenticationProvider(authenticationProvider());
         http.headers().frameOptions().sameOrigin();
+
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/images/**", "/js/**", "/webjars/**");
+        return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
     }
 
 

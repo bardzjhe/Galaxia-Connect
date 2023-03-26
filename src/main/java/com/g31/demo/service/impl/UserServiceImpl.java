@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<Object> isUserPresent(User user) {
+    public boolean isUserPresent(User user) {
         boolean userExists = false;
         String message = null;
         Optional<User> existingUserEmail = userRepository.findByEmail(user.getEmail());
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             message = "Email Already Present!";
         }
         System.out.println("existingUserEmail.isPresent() - "+existingUserEmail.isPresent());
-        return Arrays.asList(userExists, message);
+        return userExists;
     }
 
     @Override
