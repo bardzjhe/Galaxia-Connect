@@ -23,8 +23,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity  // Spring Security
 public class WebSecurityConfig {
 
-//    @Autowired
-//    private LoginSuccessHandler successHandler;
+    @Autowired(required = false)
+    private LoginSuccessHandler successHandler;
 
     @Bean // loads user-specific data that is used for authentication.
     public UserDetailsService userDetailsService() {
@@ -61,13 +61,24 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-//        http.authorizeHttpRequests(requests -> requests.requestMatchers("/").permitAll());
-//        http.authorizeHttpRequests(requests -> requests.requestMatchers("/register").permitAll());
-//        http.authorizeHttpRequests(requests -> requests.requestMatchers("/login").permitAll());
+
+//        //Public pages:
+//        http.authorizeHttpRequests(requests -> requests.antMatchers("/").permitAll());
+//        http.authorizeHttpRequests(requests -> requests.antMatchers("/login").permitAll());
+////        http.authorizeHttpRequests(requests -> requests.antMatchers("/loginError").permitAll());
+//        http.authorizeHttpRequests(requests -> requests.antMatchers("/homepage").permitAll());
+//
 //
 //        //Form login:
-//        http.formLogin(login -> login.loginPage("/logIn"));
+//        http.formLogin(login -> login.loginPage("/login"));
+//        http.formLogin(login -> login.usernameParameter("username"));
+//        http.formLogin(login -> login.passwordParameter("password"));
+//        http.formLogin(login -> login.defaultSuccessUrl("/"));
+//        http.formLogin(login -> login.failureUrl("/login?error=true"));
+//        http.formLogin(login -> login.successHandler(successHandler));
 
+        //Private pages:
+//        http.authorizeHttpRequests(requests -> requests.antMatchers("/user/dashboard").hasAnyAuthority("USER"));
 
         http.authorizeRequests()
                 // URL matching for accessibility
