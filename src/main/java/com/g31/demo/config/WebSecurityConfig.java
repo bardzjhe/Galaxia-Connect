@@ -21,6 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  * @Description: Implements authentication and authorization.
  */
 
+// TODO: It's the most important class for security issues but not yet finished.
 @Configuration
 @EnableWebSecurity  // Spring Security
 @RequiredArgsConstructor

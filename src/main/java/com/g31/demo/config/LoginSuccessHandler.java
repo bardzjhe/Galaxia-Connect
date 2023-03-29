@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @Description:
  */
-
+@Deprecated
 @Configuration
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override
