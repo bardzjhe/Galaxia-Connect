@@ -14,16 +14,13 @@ https://connectpolyu.sharepoint.com/:w:/r/sites/GRP_Security_G31/Shared%20Docume
    git clone https://github.com/RepublicHo/Galaxia-Connect
    ```
 
-2. **Create MySQL database**
+2. **Instead of using MySQL, we are now utilizing H2 (less hassle of configuration), and Redis for caching purposes.** 
 
-   ```bash
-   create database galaxia_connect_db
-   ```
-3. **Change MySQL username and password as per your MySQL installation**
+3. **There is no need when you test the code since by default no password needed. Configure Redis password if needed in the future.**
 
     + open `src/main/resources/application.properties` file.
 
-    + change `spring.datasource.username` and `spring.datasource.password` properties as per your mysql installation
+    + change `spring.redis.password` properties as per your redis.conf file. 
 
 4. **Run the app**
 

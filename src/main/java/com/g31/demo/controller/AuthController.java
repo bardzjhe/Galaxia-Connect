@@ -1,53 +1,42 @@
 package com.g31.demo.controller;
 
-import com.g31.demo.service.UserService;
-import com.g31.demo.model.User;
 
+import com.g31.demo.service.impl.AuthServiceImpl;
+import com.g31.demo.web.LoginRequest;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @Description:
  */
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Api(tags = "Authentication")
 public class AuthController {
-    @Autowired
-    UserService userService;
 
-    @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
-    public String login(){
-        return "auth/login";
+    private final AuthServiceImpl authService;
+
+    @PostMapping("/login")
+    @ApiOperation("Log-In")
+    public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
+        String token = authService.createToken(loginRequest);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", token);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/register"}, method = RequestMethod.GET)
-    public String register(Model model){
-        model.addAttribute("user", new User());
-        return "auth/register";
+    @PostMapping("/logout")
+    @ApiOperation("Log-Out")
+    public ResponseEntity<Void> logout() {
+        authService.removeToken();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
-    public String registerUser(Model model, @Valid User user, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            model.addAttribute("successMessage", "User registered successfully!");
-            model.addAttribute("bindingResult", bindingResult);
-            return "auth/register";
-        }
-        boolean ifUserPresent = userService.isUserPresent(user);
-        if(!ifUserPresent){
-            model.addAttribute("successMessage");
-            return "auth/register";
-        }
-
-        userService.saveUser(user);
-        model.addAttribute("successMessage", "User registered successfully!");
-
-        return "auth/login";
-    }
 }

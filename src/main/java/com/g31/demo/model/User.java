@@ -3,6 +3,7 @@ package com.g31.demo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotNull;
  * Every User will have only one role. The role associated with a user will be used in future to decide
  * whether the user is authorized to access a particular resource on our server or not.
  *
- * TODO: 决定用户的好友或admin详情
+ * TODO: 决定用户的好友, 一般user/admin详情
  */
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
@@ -27,6 +28,7 @@ import javax.validation.constraints.NotNull;
         })
 })
 @Entity
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -63,4 +65,7 @@ public class User extends AuditBase{
     @Column(columnDefinition = "default 1")
     private Boolean enabled;
 
+    public Boolean isEnabled(){
+        return enabled;
+    }
 }

@@ -10,8 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class AdminController {
-    @RequestMapping(value = {"/admin/dashboard"}, method = RequestMethod.GET)
-    public String adminHome(){
-        return "admin/dashboard";
-    }
+
 }

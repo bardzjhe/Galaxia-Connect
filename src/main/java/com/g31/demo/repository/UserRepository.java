@@ -13,8 +13,9 @@ import java.util.Optional;
  * if we want more features, more could be added.
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
-    User findByUsernameAndPassword(String username, String password);
+    Optional<User> findByUserName(String username);
+    User findByUserNameAndPassword(String username, String password);
     User findUserByUid(long uid);
     Optional<User> findByEmail(String email);
+    void deleteByUserName(String username);
 }

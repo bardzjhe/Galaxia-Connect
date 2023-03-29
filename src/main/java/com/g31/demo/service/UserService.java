@@ -1,14 +1,15 @@
 package com.g31.demo.service;
 
 import com.g31.demo.model.User;
-
-import java.util.List;
+import com.g31.demo.web.RegisterRequest;
+import com.g31.demo.web.UpdateRequest;
 
 /**
  * @Description:
  */
 public interface UserService {
-    public void saveUser(User user);
-    public boolean isUserPresent(User user);
+    void saveUser(RegisterRequest request);
+    void updateUser(UpdateRequest request);
+    void checkUserPresent(User user);
 
 }
