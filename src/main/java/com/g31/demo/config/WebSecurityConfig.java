@@ -28,7 +28,7 @@ public class WebSecurityConfig {
 
 
     private final StringRedisTemplate stringRedisTemplate;
-    
+
 
     @Bean // encodes and validates passwords using the BCrypt algorithm.
     public BCryptPasswordEncoder passwordEncoder() {

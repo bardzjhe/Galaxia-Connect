@@ -14,7 +14,7 @@ https://connectpolyu.sharepoint.com/:w:/r/sites/GRP_Security_G31/Shared%20Docume
    git clone https://github.com/RepublicHo/Galaxia-Connect
    ```
 
-2. **Instead of using MySQL, we are now utilizing H2 (less hassle of configuration), and Redis for caching purposes.** 
+2. **No more MySQL. But please download Redis for caching purposes.** 
 
 3. **There is no need when you test the code since by default no password needed. Configure Redis password if needed in the future.**
 
