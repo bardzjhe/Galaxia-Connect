@@ -1,34 +1,36 @@
 package com.g31.demo.model;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
+
 
 /**
  * @Description: Our application will allow new users to register and login to our application.
  * Every User will have only one role. The role associated with a user will be used in future to decide
  * whether the user is authorized to access a particular resource on our server or not.
+ *
+ * TODO: 决定用户的好友或admin详情
  */
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
-                "user_name" // unique username
+                "username" // unique username
         }),
         @UniqueConstraint(columnNames = {
                 "email" // unique email
         })
 })
 @Entity
-public class User implements UserDetails {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User extends AuditBase{
     @SequenceGenerator(
             name = "users_sequence",
             sequenceName = "users_sequence",
@@ -42,12 +44,12 @@ public class User implements UserDetails {
     private long uid;  // primary key
 
     @NotNull(message = "User name cannot be empty")
-    @Column(name = "user_name")
-    private String username;
+    @Column(name = "username")
+    private String userName;
 
     @NotNull(message = "Password cannot be empty")
     @Length(min = 8, message = "Password should be at least 8 characters long")
-    @Column(name = "password")
+    @Column
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -58,93 +60,7 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true)
     private String email;
 
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "default 1")
+    private Boolean enabled;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @Column(name = "locked")
-    private Boolean locked = false;
-
-    @Column(name = "enabled")
-    private Boolean enabled = true;
-
-//    @OneToMany
-//    private List<User> friendList;
-//
-//
-//    public List<User> getFriendList() {
-//        return friendList;
-//    }
-//
-//    public void setFriendList(List<User> friendList) {
-//        this.friendList = friendList;
-//    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public void setUid(long uid) {
-        this.uid = uid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
-        return Collections.singletonList(authority);
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() { return role; }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

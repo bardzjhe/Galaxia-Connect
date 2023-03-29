@@ -59,16 +59,16 @@ public class WebSecurityConfig {
      * @throws Exception
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public void config(HttpSecurity http) throws Exception {
 
 
 //        //Public pages:
-//        http.authorizeHttpRequests(requests -> requests.antMatchers("/").permitAll());
-//        http.authorizeHttpRequests(requests -> requests.antMatchers("/login").permitAll());
-////        http.authorizeHttpRequests(requests -> requests.antMatchers("/loginError").permitAll());
-//        http.authorizeHttpRequests(requests -> requests.antMatchers("/homepage").permitAll());
-//
-//
+        http.authorizeRequests().antMatchers("/", "/login", "/loginError").permitAll().
+                antMatchers("/account/**").hasAnyAuthority("USER")
+                .and()
+                .csrf().disable()
+                .formLogin();
+
 //        //Form login:
 //        http.formLogin(login -> login.loginPage("/login"));
 //        http.formLogin(login -> login.usernameParameter("username"));
@@ -80,35 +80,35 @@ public class WebSecurityConfig {
         //Private pages:
 //        http.authorizeHttpRequests(requests -> requests.antMatchers("/user/dashboard").hasAnyAuthority("USER"));
 
-        http.authorizeRequests()
-                // URL matching for accessibility
-                // All people can access
-                .antMatchers( "/", "/register", "/login").permitAll()
-                // Only admin can access
-                .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                // Only user can access
-                .antMatchers("/account/**").hasAnyAuthority("USER")
-                .anyRequest().authenticated();
-        // form login
-        http.csrf().disable().formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error=true")
+//        http.authorizeRequests()
+//                // URL matching for accessibility
+//                // All people can access
+//                .antMatchers( "/", "/register", "/login").permitAll()
+//                // Only admin can access
+//                .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
+//                // Only user can access
+//                .antMatchers("/account/**").hasAnyAuthority("USER")
+//                .anyRequest().authenticated();
+//        // form login
+//        http
+//                .loginPage("/login")
+////                .failureUrl("/login?error=true")
 //                .successHandler(successHandler)
-                .usernameParameter("email")
-                .passwordParameter("password").and();
-//        // logout
-        http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
-                .and()
-                .exceptionHandling()
-                .accessDeniedPage("/access-denied");
+//                .usernameParameter("email")
+//                .passwordParameter("password").and();
+////        // logout
+//        http.logout()
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/")
+//                .and()
+//                .exceptionHandling()
+//                .accessDeniedPage("/access-denied");
+//
+//
+//        http.authenticationProvider(authenticationProvider());
+//        http.headers().frameOptions().sameOrigin();
 
-
-        http.authenticationProvider(authenticationProvider());
-        http.headers().frameOptions().sameOrigin();
-
-        return http.build();
+//        return http.build();
     }
 
     @Bean
