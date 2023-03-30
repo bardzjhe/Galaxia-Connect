@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication()
 @ComponentScan(basePackages = {"com.g31.demo.repository"})
 @EnableJpaRepositories("com.g31.demo.repository")
 public class GalaxiaConnectApplication implements CommandLineRunner {
