@@ -25,9 +25,17 @@ https://connectpolyu.sharepoint.com/:w:/r/sites/GRP_Security_G31/Shared%20Docume
 4. **Run the app**
 
    You can run the spring boot app by typing the following command -
-
+   
+   Client:
+   ```bash
+   npm install (in the react-client folder)
+   npm start
+   ```
+   
+   Server:
    ```bash
    mvn spring-boot:run
-   ```
-
+   ```   
+   Run the client first and then the server, enter the correct user name and password to start using.
+   
    The server will start on port 8080.
