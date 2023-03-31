@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void checkUserPresent(User user) {
 
-        Optional<User> existingUserName = userRepository.findByUserName(user.getUserName());
+        Optional<User> existingUserName = userRepository.findByUserName(user.getUsername());
         Optional<User> existingUserEmail = userRepository.findByEmail(user.getEmail());
         if(existingUserName.isPresent() ||existingUserEmail.isPresent()){
             // TODO: How to throw exception.

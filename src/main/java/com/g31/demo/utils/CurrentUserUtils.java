@@ -9,9 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
- * @Author Anthony HE, anthony.zj.he@outlook.com
- * @Date 29/3/2023
- * @Description:
+ * @Description: Get the current user who is requesting.
  */
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

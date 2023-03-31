@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Description: Generate secure random keys to be suitable for spec-compliant signatures
+ * @Description: Generate secure random keys for spec-compliant signatures
  */
 public class JwtTokenUtils {
 
     private static final byte[] API_KEY_SECRET_BYTES = DatatypeConverter.parseBase64Binary(SecurityConst.JWT_SECRET_KEY);
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(API_KEY_SECRET_BYTES);
     public static String createToken(String username, String id, boolean rememberMe){
+        //TODO: CREATE A SECURE TOKEN
         return null;
     }
 

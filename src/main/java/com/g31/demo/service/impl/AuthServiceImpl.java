@@ -26,16 +26,19 @@ public class AuthServiceImpl {
 
     public String createToken(LoginRequest request){
         User user = userService.findByUserName(request.getUsername());
-        // 1. Check if password is correct
+        // 1. checks if the provided password matches the password stored for the user.
         if(!userService.checkPassword(request.getPassword(), user.getPassword())){
             throw new BadCredentialsException("The user name or password is not correct.");
         }
-        // 2. Check if it's disabled.
+        // 2. checks if the user is enabled.
         if(!user.isEnabled()){
             throw new BadCredentialsException("This account is disabled. ");
         }
-
-        String token = JwtTokenUtils.createToken(user.getUserName(), Long.toString(user.getUid()), request.getRememberMe());
+        // creates a JWT using JwtTokenUtils.createToken() method, passing the user's username, UID,
+        // and a boolean parameter indicating if the user wants to be remembered after logging in.
+        String token = JwtTokenUtils.createToken(user.getUsername(),
+                Long.toString(user.getUid()), request.getRememberMe());
+        // saves the UID and the JWT token to the Redis cache
         stringRedisTemplate.opsForValue().set(Long.toString(user.getUid()), token);
         return token;
     }
