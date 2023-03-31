@@ -1,5 +1,8 @@
 package com.g31.demo.config;
 
+import com.g31.demo.common.SecurityConst;
+import com.g31.demo.exception.JwtAccessDeniedException;
+import com.g31.demo.filter.JwtAuthorizationFilter;
 import com.g31.demo.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,18 +12,29 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import java.util.Arrays;
+
+import static java.util.Collections.singletonList;
 
 /**
  * @Description: Implements authentication and authorization.
@@ -36,6 +50,10 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
 
     private final StringRedisTemplate stringRedisTemplate;
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
     @Bean // encodes and validates passwords using the BCrypt algorithm.
     public BCryptPasswordEncoder passwordEncoder() {
@@ -51,57 +69,23 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
     @Bean
     public void config(HttpSecurity http) throws Exception {
 
-//        http.csrf().disable()
-//                .authorizeRequests()
-
-
-//        //Public pages:
-        http.authorizeRequests().antMatchers("/", "/login", "/loginError").permitAll().
-                antMatchers("/account/**").hasAnyAuthority("USER")
+        http.csrf().disable() // disable csrf for testing purpose.
+                .authorizeRequests()
+                //Public pages:
+                .antMatchers(SecurityConst.H2_CONSOLE).permitAll()
+                .antMatchers(SecurityConst.SWAGGER_WHITELIST).permitAll()
+                .antMatchers(SecurityConst.SYSTEM_WHITELIST).permitAll()
+                //Authentication
+                .anyRequest().authenticated()
                 .and()
-                .csrf().disable()
-                .formLogin();
+                .addFilter(new JwtAuthorizationFilter(authenticationManager((http.getSharedObject(AuthenticationConfiguration.class)))
+                        , stringRedisTemplate))
+                // TODO: If it's stateful or stateless.
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .exceptionHandling().accessDeniedHandler(new JwtAccessDeniedException());
 
-        //Form login:
-        http.formLogin(login -> login.loginPage("/login"));
-        http.formLogin(login -> login.usernameParameter("username"));
-        http.formLogin(login -> login.passwordParameter("password"));
-        http.formLogin(login -> login.defaultSuccessUrl("/"));
-        http.formLogin(login -> login.failureUrl("/login?error=true"));
-//        http.formLogin(login -> login.successHandler(successHandler));
-
-//        Private pages:
-        http.authorizeHttpRequests(requests -> requests.antMatchers("/user/dashboard").hasAnyAuthority("USER"));
-
-        http.authorizeRequests()
-                // URL matching for accessibility
-                // All people can access
-                .antMatchers( "/", "/register", "/login").permitAll()
-                // Only admin can access
-                .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                // Only user can access
-                .antMatchers("/account/**").hasAnyAuthority("USER")
-                .anyRequest().authenticated();
-        // form login
-//        http
-//                .loginPage("/login")
-////                .failureUrl("/login?error=true")
-//                .successHandler(successHandler)
-//                .usernameParameter("email")
-//                .passwordParameter("password").and();
-////        // logout
-//        http.logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl("/")
-//                .and()
-//                .exceptionHandling()
-//                .accessDeniedPage("/access-denied");
-//
-//
-//        http.authenticationProvider(authenticationProvider());
-//        http.headers().frameOptions().sameOrigin();
-//
-//        return http.build();
+        http.headers().frameOptions().disable();
+        http.build();
     }
 
     @Bean
@@ -119,6 +103,24 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableSimpleBroker("/chatroom","/user");
         registry.setUserDestinationPrefix("/user");
+    }
+
+    /**
+     * @author shuang kou
+     */
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        org.springframework.web.cors.CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(singletonList("*"));
+        // configuration.setAllowedOriginPatterns(singletonList("*"));
+        configuration.setAllowedHeaders(singletonList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT", "OPTIONS"));
+        configuration.setExposedHeaders(singletonList(SecurityConst.TOKEN_HEADER));
+        configuration.setAllowCredentials(false);
+        configuration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }

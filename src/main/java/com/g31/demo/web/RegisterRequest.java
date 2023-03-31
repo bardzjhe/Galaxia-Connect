@@ -10,6 +10,9 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @Description:
+ *
+ * http://localhost:8080/users/sign-up
+ * {"userName":"123456","password":"123456", "role": "user", "email":"@outlook.com"}
  */
 
 @Data

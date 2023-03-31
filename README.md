@@ -15,14 +15,19 @@ https://connectpolyu.sharepoint.com/:w:/r/sites/GRP_Security_G31/Shared%20Docume
    ```
 
 2. **No more MySQL. But please download Redis for caching purposes.** 
++ Without Redis, the program cannot run properly. 
+For more information about how to get started on redis, please refer to [link](https://tableplus.com/blog/2018/10/how-to-start-stop-restart-redis.html).
+If you are using Windows, you are suggested to download Redis-x64-5.0.14.1.msi from [link](https://github.com/tporadowski/redis/releases) 
+and add redis folder to the PATH environment variables accordingly. (If you find any bugs with related to redis in the console
+after running the program, it indicates that you didn't configure Redis properly). 
 
-3. **There is no need when you test the code since by default no password needed. Configure Redis password if needed in the future.**
+4. **There is no need when you test the code since by default no password needed. Configure Redis password if needed in the future.**
 
     + open `src/main/resources/application.properties` file.
 
     + change `spring.redis.password` properties as per your redis.conf file. 
 
-4. **Run the app**
+5. **Run the app**
 
    You can run the spring boot app by typing the following command -
    
