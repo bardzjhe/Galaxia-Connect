@@ -1,6 +1,8 @@
 package com.g31.demo.controller;
 
-import com.involveininnovation.chat.model.Message;
+
+import com.g31.demo.model.Message;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
