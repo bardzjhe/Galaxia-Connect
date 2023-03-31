@@ -1,4 +1,4 @@
-package com.involveininnovation.chat.controller;
+package com.g31.demo.controller;
 
 import com.involveininnovation.chat.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;

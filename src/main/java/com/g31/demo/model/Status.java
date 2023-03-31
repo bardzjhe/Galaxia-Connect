@@ -1,4 +1,4 @@
-package com.involveininnovation.chat.model;
+package com.g31.demo.model;
 
 public enum Status {
     JOIN,
