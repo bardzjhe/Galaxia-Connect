@@ -1,16 +1,29 @@
 package com.g31.demo.service.impl;
 
+import com.g31.demo.exception.RoleNotFoundException;
+import com.g31.demo.exception.UserNameAlreadyExistException;
 import com.g31.demo.exception.UserNameNotFoundException;
+import com.g31.demo.model.Role;
+import com.g31.demo.model.RoleType;
+import com.g31.demo.model.UserRole;
+import com.g31.demo.repository.RoleRepository;
+import com.g31.demo.repository.UserRoleRepository;
 import com.g31.demo.service.UserService;
 import com.g31.demo.model.User;
 import com.g31.demo.repository.UserRepository;
 import com.g31.demo.web.RegisterRequest;
 import com.g31.demo.web.UpdateRequest;
+import com.g31.demo.web.UserRepresentation;
+import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.Objects;
 import java.util.Optional;
@@ -22,28 +35,34 @@ import java.util.Optional;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService{
 
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
-
+    public static final String USERNAME = "username:";
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveUser(RegisterRequest registerRequest) {
 //        checkUserNameNotExist(userRegisterRequest.getUserName());
         User user = registerRequest.toUser();
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);
+        // save NORMAL user into the userRoleRepository
+        Role studentRole = roleRepository.findByName(RoleType.USER.getRole())
+                .orElseThrow(() -> new RoleNotFoundException(ImmutableMap.of("roleName", RoleType.USER.getRole())));
+        userRoleRepository.save(new UserRole(user, studentRole));
 
-        // TODO: If there are admin and normal user, more code should be added
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateUser(UpdateRequest request){
         Optional<User> users = userRepository.findByUserName(request.getUserName());
 
         if(!users.isPresent()){
-            // TODO: to finish designing the exception
-//            throw new UsernameNotFoundException();
+//            throw new UserNameAlreadyExistException(ImmutableMap.of(USERNAME, users.get().getUsername()));
         }
         User user = users.get();
         if(Objects.nonNull(request.getUserName())){
@@ -53,10 +72,9 @@ public class UserServiceImpl implements UserService{
             user.setPassword(request.getPassword());
         }
 
-        // TODO: check if role needed
-//        if(Objects.nonNull(request.getRole())){
-//
-//        }
+        if(Objects.nonNull(request.getEnabled())){
+            user.setEnabled(request.getEnabled());
+        }
         if(Objects.nonNull(request.getEmail())){
             user.setEmail(request.getEmail());
         }
@@ -80,6 +98,9 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    public Page<UserRepresentation> getAll(int pageNum, int pageSize) {
+        return userRepository.findAll(PageRequest.of(pageNum, pageSize)).map(User::toUserRepresentation);
+    }
     public boolean checkPassword(String p1, String password){
         return this.bCryptPasswordEncoder.matches(p1, password);
     }
@@ -92,11 +113,15 @@ public class UserServiceImpl implements UserService{
 //                .orElseThrow(() -> new UserNameNotFoundException());
     }
 
-    public void delete(String username){
-        if(!userRepository.findByUserName(username).isPresent()){
-            // TODO: throw an exception
+    public User find(String userName) {
+        return userRepository.findByUserName(userName).orElseThrow(() -> new UserNameNotFoundException(ImmutableMap.of(USERNAME, userName)));
+    }
+
+    public void delete(String userName) {
+        if (!userRepository.existsByUserName(userName)) {
+            throw new UserNameNotFoundException(ImmutableMap.of(USERNAME, userName));
         }
-        userRepository.deleteByUserName(username);
+        userRepository.deleteByUserName(userName);
     }
 
     // TODO: you may add more methods if needed

@@ -4,6 +4,14 @@ package com.g31.demo.common;
  * @Description:
  */
 public final class SecurityConst {
+
+    public static final String TOKEN_TYPE = "JWT";
+
+    // the expiration period is 20 minutes if rememberMe is false.
+    public static final long EXPIRATION_FALSE_REMEMBER = 20 * 60L;
+
+    // the expiration period is 7 days if rememberMe is false.
+    public static final long EXPIRATION_TRUE_REMEMBER = 60 * 60 * 24 * 7L;
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
 
@@ -25,5 +33,5 @@ public final class SecurityConst {
             "/v3/api-docs"
     };
 
-    public static final String H2_CONSOLE = "/h2-console/**";
+//    public static final String H2_CONSOLE = "/h2-console/**";
 }

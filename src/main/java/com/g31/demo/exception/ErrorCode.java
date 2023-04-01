@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
- * @Description:
+ * @Description: Some Error Codes using in this project.
  */
 
 @Getter

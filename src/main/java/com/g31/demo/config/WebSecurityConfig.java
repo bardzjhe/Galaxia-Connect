@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -69,12 +71,13 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
     @Bean
     public void config(HttpSecurity http) throws Exception {
 
-        http.csrf().disable() // disable csrf for testing purpose.
+        http.cors(Customizer.withDefaults()).csrf().disable() // disable csrf for testing purpose.
                 .authorizeRequests()
                 //Public pages:
-                .antMatchers(SecurityConst.H2_CONSOLE).permitAll()
+//                .antMatchers(SecurityConst.H2_CONSOLE).permitAll()
                 .antMatchers(SecurityConst.SWAGGER_WHITELIST).permitAll()
                 .antMatchers(SecurityConst.SYSTEM_WHITELIST).permitAll()
+                .antMatchers(HttpMethod.POST,"/users/sign-up").permitAll()
                 //Authentication
                 .anyRequest().authenticated()
                 .and()
@@ -93,17 +96,17 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
         return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
     }
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/chatroom","/user");
-        registry.setUserDestinationPrefix("/user");
-    }
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
+//    }
+//
+//    @Override
+//    public void configureMessageBroker(MessageBrokerRegistry registry) {
+//        registry.setApplicationDestinationPrefixes("/app");
+//        registry.enableSimpleBroker("/chatroom","/user");
+//        registry.setUserDestinationPrefix("/user");
+//    }
 
     /**
      * @author shuang kou

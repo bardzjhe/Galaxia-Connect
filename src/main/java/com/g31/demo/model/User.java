@@ -1,18 +1,27 @@
 package com.g31.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.g31.demo.web.UserRepresentation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -36,29 +45,23 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
-    @SequenceGenerator(
-            name = "users_sequence",
-            sequenceName = "users_sequence",
-            allocationSize = 1
-    )
+
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "users_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long uid;  // primary key
 
     @NotNull(message = "User name cannot be empty")
-    @Column(name = "username")
+    @Column
     private String userName;
 
     @NotNull(message = "Password cannot be empty")
-    @Length(min = 8, message = "Password should be at least 8 characters long")
+    @Length(message = "Password is suggested to be at least 8 characters long")
     @Column
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<UserRole> userRoles = new ArrayList<>();
 
     @NotNull(message = "Email cannot be empty")
     @Email(message = "Please enter a valid email address")
@@ -68,9 +71,20 @@ public class User implements UserDetails {
     @Column(columnDefinition = "default 1")
     private Boolean enabled;
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<Role> roles = userRoles.stream().map(UserRole::getRole).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
+        return authorities;
     }
 
     @Override
@@ -98,5 +112,9 @@ public class User implements UserDetails {
         return this.enabled;
     }
 
+    public UserRepresentation toUserRepresentation() {
+        return UserRepresentation.builder()
+                .userName(this.userName).build();
+    }
 
 }

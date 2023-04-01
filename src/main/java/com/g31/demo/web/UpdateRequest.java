@@ -1,6 +1,6 @@
 package com.g31.demo.web;
 
-import com.g31.demo.model.Role;
+import com.g31.demo.model.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class UpdateRequest {
 
     private String password;
 
-    private Role role;
+    private Boolean enabled;
 
     private String email;
 }

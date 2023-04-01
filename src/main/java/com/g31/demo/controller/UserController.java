@@ -1,11 +1,15 @@
 package com.g31.demo.controller;
 
-import com.g31.demo.service.UserService;
+
+import com.g31.demo.service.impl.UserServiceImpl;
 import com.g31.demo.web.RegisterRequest;
+import com.g31.demo.web.UpdateRequest;
+import com.g31.demo.web.UserRepresentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,7 +26,7 @@ import javax.validation.Valid;
 @Api(tags = "user")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @PostMapping("/sign-up")
     @ApiOperation("User sign-up")
@@ -31,7 +35,26 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    // TODO: if the user is admin, he/she should be capable of obtaining all information
-    // TODO: some methods can be added for admin, like update user's information or delete.
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @ApiOperation("Get all user name")
+    public ResponseEntity<Page<UserRepresentation>> getAllUser(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+        Page<UserRepresentation> allUser = userService.getAll(pageNum, pageSize);
+        return ResponseEntity.ok().body(allUser);
+    }
+    @PutMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation("Update user")
+    public ResponseEntity<Void> update(@RequestBody @Valid UpdateRequest request) {
+        userService.updateUser(request);
+        return ResponseEntity.ok().build();
+    }
 
+    @DeleteMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation("根据用户名删除用户")
+    public ResponseEntity<Void> deleteUserByUserName(@RequestParam("username") String username) {
+        userService.delete(username);
+        return ResponseEntity.ok().build();
+    }
 }
