@@ -1,11 +1,11 @@
 package com.g31.demo.service;
 
+import com.g31.demo.web.LoginRequest;
+
 /**
- * @Author Anthony HE, anthony.zj.he@outlook.com
- * @Date 29/3/2023
  * @Description:
  */
 public interface AuthService {
-    void createToken();
+    String createToken(LoginRequest request);
 
 }

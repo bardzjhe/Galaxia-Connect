@@ -43,8 +43,12 @@ after running the program, it indicates that you didn't configure Redis properly
    ```bash
    mvn spring-boot:run
    ```   
-   Run the client first and then the server, enter the correct user name and password to start using.
+   Run the client first and then the server, enter the correct auditUser name and password to start using.
    
    The server will start on port 8080.
 
+<<<<<<< HEAD
 6. Check the H2 database on  http://localhost:8080/api/h2-console
+=======
+Check the H2 database on http://localhost:8080/api/h2-console
+>>>>>>> update

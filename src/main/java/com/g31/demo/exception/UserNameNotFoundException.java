@@ -1,5 +1,7 @@
 package com.g31.demo.exception;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Map;
 
 /**
@@ -8,7 +10,9 @@ import java.util.Map;
  * @Description:
  */
 public class UserNameNotFoundException extends BaseException{
-    UserNameNotFoundException(ErrorCode errorCode, Map<String, Object> data) {
-        super(errorCode, data);
+    public UserNameNotFoundException(Map<String, Object> data) {
+        super(ErrorCode.USER_NAME_NOT_FOUND, data);
     }
+
+
 }

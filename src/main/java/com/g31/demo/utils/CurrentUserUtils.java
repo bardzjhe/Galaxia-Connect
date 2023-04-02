@@ -1,6 +1,6 @@
 package com.g31.demo.utils;
 
-import com.g31.demo.model.User;
+import com.g31.demo.model.AuditUser;
 import com.g31.demo.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class CurrentUserUtils {
     private final UserServiceImpl userService;
 
-    public User getCurrentUser(){
+    public AuditUser getCurrentUser(){
         return userService.findByUserName(getCurrentUserName());
     }
     private String getCurrentUserName(){

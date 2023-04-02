@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * @Description:
+ * @Description: Authentication controller is used for handling login and logout
  */
 @RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(tags = "Authentication")
 public class AuthController {
@@ -24,7 +25,7 @@ public class AuthController {
     private final AuthServiceImpl authService;
 
     @PostMapping("/login")
-    @ApiOperation("Log-In")
+    @ApiOperation("login")
     public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
         String token = authService.createToken(loginRequest);
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -33,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    @ApiOperation("Log-Out")
+    @ApiOperation("logout")
     public ResponseEntity<Void> logout() {
         authService.removeToken();
         return new ResponseEntity<>(HttpStatus.OK);

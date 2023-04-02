@@ -51,7 +51,8 @@ public class AuditUser extends AuditBase{
     private List<UserRole> userRoles = new ArrayList<>();
 
 //    @NotNull(message = "Email cannot be empty")
-//    @Email(message = "Please enter a valid email address")
+
+    @Email(message = "Please enter a valid email address")
     @Column
     private String email;
 
