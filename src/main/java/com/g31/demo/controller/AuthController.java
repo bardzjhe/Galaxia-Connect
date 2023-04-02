@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * @Description:
+ * @Description: Authentication controller is used for handling login and logout
  */
 @RestController
 @RequestMapping("/auth")

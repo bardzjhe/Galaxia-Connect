@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * @Description:
+ * @Description: User controller is used for handling
+ * 1. user's getting other user usernames request
+ * 2. admin's updating and deleting user's info request
+ * 3. Both sign up request.
  */
 @RestController
 @RequestMapping("/users")
@@ -52,7 +55,7 @@ public class UserController {
 
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation("根据用户名删除用户")
+    @ApiOperation("delete user")
     public ResponseEntity<Void> deleteUserByUserName(@RequestParam("username") String username) {
         userService.delete(username);
         return ResponseEntity.ok().build();

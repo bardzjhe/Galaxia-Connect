@@ -14,10 +14,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -37,6 +39,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import java.util.Arrays;
 
 import static java.util.Collections.singletonList;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * @Description: Implements authentication and authorization.
@@ -45,21 +48,23 @@ import static java.util.Collections.singletonList;
 // TODO: It's the most important class for security issues but not yet finished.
 @Configuration
 @EnableWebSecurity  // Spring Security
-@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSocketMessageBroker
-public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
-
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final StringRedisTemplate stringRedisTemplate;
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public WebSecurityConfig(StringRedisTemplate stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
     }
 
     @Bean // encodes and validates passwords using the BCrypt algorithm.
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SuccessHandler successHandler(){
+        return new SuccessHandler();
     }
 
     /**
@@ -68,46 +73,38 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
      * @return
      * @throws Exception
      */
-    @Bean
-    public SecurityFilterChain config(HttpSecurity http) throws Exception {
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
 
-        http.cors(Customizer.withDefaults()).csrf().disable() // disable csrf for testing purpose.
+        http.csrf().disable() // disable csrf for testing purpose.
+                .headers().frameOptions().disable() // fix H2 console access
+                .and()
                 .authorizeRequests()
                 //Public pages:
-//                .antMatchers(SecurityConst.H2_CONSOLE).permitAll()
+                .requestMatchers(new AntPathRequestMatcher(SecurityConst.H2_CONSOLE)).permitAll()
                 .antMatchers(SecurityConst.SWAGGER_WHITELIST).permitAll()
                 .antMatchers(SecurityConst.SYSTEM_WHITELIST).permitAll()
-                .antMatchers(HttpMethod.POST,"/users/sign-up").permitAll()
                 //Authentication
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager((http.getSharedObject(AuthenticationConfiguration.class)))
-                        , stringRedisTemplate))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), stringRedisTemplate))
                 // TODO: If it's stateful or stateless.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().accessDeniedHandler(new JwtAccessDeniedException());
 
-        http.headers().frameOptions().disable();
-        return http.build();
 
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
+
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
     }
 
-//    @Override
-//    public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
-//    }
-//
-//    @Override
-//    public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.setApplicationDestinationPrefixes("/app");
-//        registry.enableSimpleBroker("/chatroom","/user");
-//        registry.setUserDestinationPrefix("/user");
-//    }
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker("/chatroom","/user");
+        registry.setUserDestinationPrefix("/user");
+    }
 
     /**
      * @author shuang kou

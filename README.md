@@ -44,3 +44,5 @@ after running the program, it indicates that you didn't configure Redis properly
    Run the client first and then the server, enter the correct auditUser name and password to start using.
    
    The server will start on port 8080.
+
+Check the H2 database on http://localhost:8080/api/h2-console

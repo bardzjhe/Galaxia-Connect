@@ -55,7 +55,7 @@ public class AuditUser extends AuditBase{
     @Column
     private String email;
 
-    @Column(columnDefinition = "default 1")
+    @Column
     private Boolean enabled;
 
 

@@ -46,8 +46,8 @@ public class GalaxiaConnectApplication implements CommandLineRunner {
 			roleRepository.save(new Role(roleType.getName(), roleType.getDescription()));
 		}
 		// initialize an admin account in user repository
-		AuditUser auditUser = AuditUser.builder().userName("admin")
-				.password(bCryptPasswordEncoder.encode("admin12345678"))
+		AuditUser auditUser = AuditUser.builder().userName("root")
+				.password(bCryptPasswordEncoder.encode("root"))
 				.email("kevin@outlook.com").build();
 		userRepository.save(auditUser);
 		Role role = roleRepository.findByName(RoleType.ADMIN.getName()).get();

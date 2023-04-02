@@ -12,11 +12,11 @@ public final class SecurityConst {
 
     // the expiration period is 7 days if rememberMe is false.
     public static final long EXPIRATION_TRUE_REMEMBER = 60 * 60 * 24 * 7L;
+
+    public static final String JWT_SECRET_KEY = "D*A-PbNdRgAkXn5r5u8x/A?D(G+KbPeShVmYq3s6v9y$B&E)H@McQfTjWnZr4u7w";
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
 
-    // TODO: design a secret key
-    public static final String JWT_SECRET_KEY = "";
     public static final String ROLE_CLAIMS = "rol";
 
     // System WHITELIST
@@ -33,5 +33,5 @@ public final class SecurityConst {
             "/v3/api-docs"
     };
 
-//    public static final String H2_CONSOLE = "/h2-console/**";
+    public static final String H2_CONSOLE = "/h2-console/**";
 }
