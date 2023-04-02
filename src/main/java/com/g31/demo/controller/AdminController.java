@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @Description:
  */
-@RestController
-public class AdminController {
-
-}
+//@RestController
+//public class AdminController {
+//
+//}

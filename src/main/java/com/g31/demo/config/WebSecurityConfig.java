@@ -2,6 +2,7 @@ package com.g31.demo.config;
 
 import com.g31.demo.common.SecurityConst;
 import com.g31.demo.exception.JwtAccessDeniedException;
+import com.g31.demo.exception.JwtAccessDeniedHandler;
 import com.g31.demo.filter.JwtAuthorizationFilter;
 import com.g31.demo.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -67,13 +68,21 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
      * @throws Exception
      */
     @Bean
+<<<<<<< Updated upstream
     public void config(HttpSecurity http) throws Exception {
+=======
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+>>>>>>> Stashed changes
 
         http.csrf().disable() // disable csrf for testing purpose.
                 .authorizeRequests()
                 //Public pages:
+<<<<<<< Updated upstream
                 .antMatchers(SecurityConst.H2_CONSOLE).permitAll()
+=======
+>>>>>>> Stashed changes
                 .antMatchers(SecurityConst.SWAGGER_WHITELIST).permitAll()
+                .antMatchers(SecurityConst.H2_CONSOLE).permitAll()
                 .antMatchers(SecurityConst.SYSTEM_WHITELIST).permitAll()
                 //Authentication
                 .anyRequest().authenticated()
@@ -82,7 +91,7 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
                         , stringRedisTemplate))
                 // TODO: If it's stateful or stateless.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .exceptionHandling().accessDeniedHandler(new JwtAccessDeniedException());
+                .exceptionHandling().accessDeniedHandler(new JwtAccessDeniedException()).accessDeniedHandler(new JwtAccessDeniedHandler());
 
         http.headers().frameOptions().disable();
         http.build();
