@@ -1,15 +1,14 @@
 package com.g31.demo.service.impl;
 
 import com.g31.demo.exception.RoleNotFoundException;
-import com.g31.demo.exception.UserNameAlreadyExistException;
 import com.g31.demo.exception.UserNameNotFoundException;
+import com.g31.demo.model.AuditUser;
 import com.g31.demo.model.Role;
 import com.g31.demo.model.RoleType;
 import com.g31.demo.model.UserRole;
 import com.g31.demo.repository.RoleRepository;
 import com.g31.demo.repository.UserRoleRepository;
 import com.g31.demo.service.UserService;
-import com.g31.demo.model.User;
 import com.g31.demo.repository.UserRepository;
 import com.g31.demo.web.RegisterRequest;
 import com.g31.demo.web.UpdateRequest;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,55 +41,56 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveUser(RegisterRequest registerRequest) {
+    public void save(RegisterRequest registerRequest) {
 //        checkUserNameNotExist(userRegisterRequest.getUserName());
-        User user = registerRequest.toUser();
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        userRepository.save(user);
+        AuditUser auditUser = registerRequest.toUser();
+        String encodedPassword = bCryptPasswordEncoder.encode(auditUser.getPassword());
+        auditUser.setPassword(encodedPassword);
+        auditUser.setEmail(auditUser.getEmail());
+        userRepository.save(auditUser);
         // save NORMAL user into the userRoleRepository
-        Role studentRole = roleRepository.findByName(RoleType.USER.getRole())
-                .orElseThrow(() -> new RoleNotFoundException(ImmutableMap.of("roleName", RoleType.USER.getRole())));
-        userRoleRepository.save(new UserRole(user, studentRole));
+        Role studentRole = roleRepository.findByName(RoleType.USER.getName())
+                .orElseThrow(() -> new RoleNotFoundException(ImmutableMap.of("roleName", RoleType.USER.getName())));
+        userRoleRepository.save(new UserRole(auditUser, studentRole));
 
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateUser(UpdateRequest request){
-        Optional<User> users = userRepository.findByUserName(request.getUserName());
+    public void update(UpdateRequest request){
+        Optional<AuditUser> users = userRepository.findByUserName(request.getUserName());
 
         if(!users.isPresent()){
 //            throw new UserNameAlreadyExistException(ImmutableMap.of(USERNAME, users.get().getUsername()));
         }
-        User user = users.get();
+        AuditUser auditUser = users.get();
         if(Objects.nonNull(request.getUserName())){
-            user.setUserName(request.getUserName());
+            auditUser.setUserName(request.getUserName());
         }
         if(Objects.nonNull(request.getPassword())){
-            user.setPassword(request.getPassword());
+            auditUser.setPassword(request.getPassword());
         }
 
         if(Objects.nonNull(request.getEnabled())){
-            user.setEnabled(request.getEnabled());
+            auditUser.setEnabled(request.getEnabled());
         }
         if(Objects.nonNull(request.getEmail())){
-            user.setEmail(request.getEmail());
+            auditUser.setEmail(request.getEmail());
         }
-        userRepository.save(user);
+        userRepository.save(auditUser);
     }
 
     //TODO: If there is any others to check? like if username is legal.
     /**
      * Check both username or email
      *
-     * @param user
+     * @param auditUser
      */
     @Override
-    public void checkUserPresent(User user) {
+    public void checkUserPresent(AuditUser auditUser) {
 
-        Optional<User> existingUserName = userRepository.findByUserName(user.getUsername());
-        Optional<User> existingUserEmail = userRepository.findByEmail(user.getEmail());
+        Optional<AuditUser> existingUserName = userRepository.findByUserName(auditUser.getUserName());
+        Optional<AuditUser> existingUserEmail = userRepository.findByEmail(auditUser.getEmail());
         if(existingUserName.isPresent() ||existingUserEmail.isPresent()){
             // TODO: How to throw exception.
 //            throw new UserNameAlreadyExistException();
@@ -99,21 +98,21 @@ public class UserServiceImpl implements UserService{
     }
 
     public Page<UserRepresentation> getAll(int pageNum, int pageSize) {
-        return userRepository.findAll(PageRequest.of(pageNum, pageSize)).map(User::toUserRepresentation);
+        return userRepository.findAll(PageRequest.of(pageNum, pageSize)).map(AuditUser::toUserRepresentation);
     }
     public boolean checkPassword(String p1, String password){
         return this.bCryptPasswordEncoder.matches(p1, password);
     }
 
     // TODO: How to design exception
-    public User findByUserName(String username){
+    public AuditUser findByUserName(String username){
 
         return null;
 //        return userRepository.findByUserName(username)
 //                .orElseThrow(() -> new UserNameNotFoundException());
     }
 
-    public User find(String userName) {
+    public AuditUser find(String userName) {
         return userRepository.findByUserName(userName).orElseThrow(() -> new UserNameNotFoundException(ImmutableMap.of(USERNAME, userName)));
     }
 

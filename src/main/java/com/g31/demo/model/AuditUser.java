@@ -7,19 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,85 +25,45 @@ import java.util.stream.Collectors;
  *
  * TODO: 决定用户的好友, 一般user/admin详情
  */
-@Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "username" // unique username
-        }),
-        @UniqueConstraint(columnNames = {
-                "email" // unique email
-        })
-})
+@Table(name = "auditUser")
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+public class AuditUser extends AuditBase{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long uid;  // primary key
 
-    @NotNull(message = "User name cannot be empty")
-    @Column
+//    @NotNull(message = "User name cannot be empty")
+    @Column(nullable = false)
     private String userName;
 
-    @NotNull(message = "Password cannot be empty")
+//    @NotNull(message = "Password cannot be empty")
     @Length(message = "Password is suggested to be at least 8 characters long")
-    @Column
+    @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "auditUser", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<UserRole> userRoles = new ArrayList<>();
 
-    @NotNull(message = "Email cannot be empty")
+//    @NotNull(message = "Email cannot be empty")
     @Email(message = "Please enter a valid email address")
-    @Column(name = "email", unique = true)
+    @Column
     private String email;
 
     @Column(columnDefinition = "default 1")
     private Boolean enabled;
 
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<SimpleGrantedAuthority> getAuthorities() {
         List<Role> roles = userRoles.stream().map(UserRole::getRole).collect(Collectors.toList());
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
         return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return userName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
     }
 
     public UserRepresentation toUserRepresentation() {

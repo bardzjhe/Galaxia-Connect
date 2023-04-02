@@ -1,12 +1,11 @@
 package com.g31.demo.repository;
 
 
-import com.g31.demo.model.User;
+import com.g31.demo.model.AuditUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,9 +13,9 @@ import java.util.Optional;
  *
  * if we want more features, more could be added.
  */
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUserName(String username);
-    Optional<User> findByEmail(String email);
+public interface UserRepository extends JpaRepository<AuditUser, Long> {
+    Optional<AuditUser> findByUserName(String username);
+    Optional<AuditUser> findByEmail(String email);
     @Modifying
     @Transactional(rollbackFor = Exception.class)
     void deleteByUserName(String userName);

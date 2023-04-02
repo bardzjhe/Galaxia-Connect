@@ -19,14 +19,14 @@ public class UserRole implements Serializable {
     private Long id;
     @ManyToOne
     @JoinColumn
-    private User user;
+    private AuditUser auditUser;
 
     @ManyToOne
     @JoinColumn
     private Role role;
 
-    public UserRole(User user, Role role) {
-        this.user = user;
+    public UserRole(AuditUser auditUser, Role role) {
+        this.auditUser = auditUser;
         this.role = role;
     }
 }

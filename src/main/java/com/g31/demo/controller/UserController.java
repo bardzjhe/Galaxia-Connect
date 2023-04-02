@@ -31,13 +31,13 @@ public class UserController {
     @PostMapping("/sign-up")
     @ApiOperation("User sign-up")
     public ResponseEntity<Void> signUp(@RequestBody @Valid RegisterRequest request) {
-        userService.saveUser(request);
+        userService.save(request);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    @ApiOperation("Get all user name")
+    @ApiOperation("Get all user name in pages")
     public ResponseEntity<Page<UserRepresentation>> getAllUser(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
         Page<UserRepresentation> allUser = userService.getAll(pageNum, pageSize);
         return ResponseEntity.ok().body(allUser);
@@ -46,7 +46,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation("Update user")
     public ResponseEntity<Void> update(@RequestBody @Valid UpdateRequest request) {
-        userService.updateUser(request);
+        userService.update(request);
         return ResponseEntity.ok().build();
     }
 

@@ -6,7 +6,7 @@
 <body>
 <h2>Welcome to Homepage</h2>
 <p sec:authorize="hasRole('ROLE_ANONYMOUS')">Text visible to anonymous.</p>
-<p sec:authorize="hasRole('USER')">Text visible to user.</p>
+<p sec:authorize="hasRole('USER')">Text visible to auditUser.</p>
 <p sec:authorize="hasRole('ADMIN')">Text visible to admin.</p>
 <p sec:authorize="isAuthenticated()">Text visible only to authenticated users.</p>
 

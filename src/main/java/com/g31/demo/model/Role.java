@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role extends AuditBase{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

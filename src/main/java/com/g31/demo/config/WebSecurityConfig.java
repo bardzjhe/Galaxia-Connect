@@ -69,7 +69,7 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
      * @throws Exception
      */
     @Bean
-    public void config(HttpSecurity http) throws Exception {
+    public SecurityFilterChain config(HttpSecurity http) throws Exception {
 
         http.cors(Customizer.withDefaults()).csrf().disable() // disable csrf for testing purpose.
                 .authorizeRequests()
@@ -88,7 +88,8 @@ public class WebSecurityConfig implements WebSocketMessageBrokerConfigurer{
                 .exceptionHandling().accessDeniedHandler(new JwtAccessDeniedException());
 
         http.headers().frameOptions().disable();
-        http.build();
+        return http.build();
+
     }
 
     @Bean

@@ -4,7 +4,7 @@
     <title>Login</title>
 </head>
 <body>
-<form th:action="@{/register}" th:object="${user}" method="post">
+<form th:action="@{/register}" th:object="${auditUser}" method="post">
     <h3>Registration</h3>
     <input type="text" th:field="*{firstName}" placeholder="First Name" /> <br/><br/>
     <input type="text" th:field="*{lastName}" placeholder="Last Name" /> <br/><br/>

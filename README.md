@@ -41,6 +41,6 @@ after running the program, it indicates that you didn't configure Redis properly
    ```bash
    mvn spring-boot:run
    ```   
-   Run the client first and then the server, enter the correct user name and password to start using.
+   Run the client first and then the server, enter the correct auditUser name and password to start using.
    
    The server will start on port 8080.

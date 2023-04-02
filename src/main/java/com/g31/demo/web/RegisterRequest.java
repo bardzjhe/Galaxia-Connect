@@ -1,6 +1,6 @@
 package com.g31.demo.web;
 
-import com.g31.demo.model.User;
+import com.g31.demo.model.AuditUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +26,8 @@ public class RegisterRequest {
     @NotBlank
     private String email;
 
-    public User toUser() {
-        return User.builder().userName(this.getUserName())
+    public AuditUser toUser() {
+        return AuditUser.builder().userName(this.getUserName())
                 .email(this.getEmail())
                 .enabled(true).build();
 
