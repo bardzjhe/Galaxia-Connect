@@ -19,7 +19,7 @@ public class ConsConfig implements WebMvcConfigurer {
                 // If this attribute is not set, the frontend will not be able to
                 // retrieve the Authorization (i.e., token) from the response header.
                 .exposedHeaders("Authorization")
-                .allowCredentials(true)
+                .allowCredentials(false)
                 .allowedMethods("GET", "POST", "DELETE", "PUT")
                 .maxAge(3600);
     }
