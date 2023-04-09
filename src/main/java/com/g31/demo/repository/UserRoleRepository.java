@@ -4,9 +4,7 @@ import com.g31.demo.model.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * @Description:
- */
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
+
 }

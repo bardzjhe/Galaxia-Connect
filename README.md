@@ -43,12 +43,18 @@ after running the program, it indicates that you didn't configure Redis properly
    ```bash
    mvn spring-boot:run
    ```   
-   Run the client first and then the server, enter the correct auditUser name and password to start using.
+   Run the client first and then the server, enter the correct user name and password to start using.
    
    The server will start on port 8080.
 
-<<<<<<< HEAD
-6. Check the H2 database on  http://localhost:8080/api/h2-console
-=======
-Check the H2 database on http://localhost:8080/api/h2-console
->>>>>>> update
+
+## Demo
+
+1. Successfully register a normal user account. In this application, admin is pre-registered
+and cannot register an admin in rest API.
+![img.png](img.png)
+2. Successfully login. 
+![img_1.png](img_1.png)
+
+and we can find the JWT Bear authentication value in the header. 
+![img_2.png](img_2.png)

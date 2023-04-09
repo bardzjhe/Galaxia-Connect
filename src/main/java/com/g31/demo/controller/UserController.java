@@ -1,10 +1,9 @@
 package com.g31.demo.controller;
 
-
-import com.g31.demo.service.impl.UserServiceImpl;
+import com.g31.demo.service.UserService;
 import com.g31.demo.web.RegisterRequest;
-import com.g31.demo.web.UpdateRequest;
 import com.g31.demo.web.UserRepresentation;
+import com.g31.demo.web.UpdateRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -12,44 +11,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 /**
- * @Description: User controller is used for handling
- * 1. user's getting other user usernames request
- * 2. admin's updating and deleting user's info request
- * 3. Both sign up request.
+ * @author shuang.kou
  */
 @RestController
-@RequestMapping("/users")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequestMapping("/users")
 @Api(tags = "user")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @PostMapping("/sign-up")
-    @ApiOperation("User sign-up")
-    public ResponseEntity<Void> signUp(@RequestBody @Valid RegisterRequest request) {
-        userService.save(request);
+    @ApiOperation("User register")
+    public ResponseEntity<Void> signUp(@RequestBody @Valid RegisterRequest registerRequest) {
+        userService.save(registerRequest);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    @ApiOperation("Get all user name in pages")
-    public ResponseEntity<Page<UserRepresentation>> getAllUser(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+    @ApiOperation("Obtain all user information")
+    public ResponseEntity<Page<UserRepresentation>> getAllUser(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         Page<UserRepresentation> allUser = userService.getAll(pageNum, pageSize);
         return ResponseEntity.ok().body(allUser);
     }
+
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation("Update user")
-    public ResponseEntity<Void> update(@RequestBody @Valid UpdateRequest request) {
-        userService.update(request);
+    @ApiOperation("update user")
+    public ResponseEntity<Void> update(@RequestBody @Valid UpdateRequest updateRequest) {
+        userService.update(updateRequest);
         return ResponseEntity.ok().build();
     }
 

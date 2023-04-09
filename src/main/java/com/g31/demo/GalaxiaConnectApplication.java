@@ -1,6 +1,6 @@
 package com.g31.demo;
 
-import com.g31.demo.model.AuditUser;
+import com.g31.demo.model.User;
 import com.g31.demo.model.Role;
 import com.g31.demo.model.RoleType;
 import com.g31.demo.model.UserRole;
@@ -11,26 +11,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@SpringBootApplication()
-@ComponentScan(basePackages = {"com.g31.demo.repository"})
+
+//@ComponentScan//(basePackages = {"com.g31.demo.repository", "com.g31.demo.controller", "com.g31.demo.service"})
+@SpringBootApplication//(exclude = SecurityAutoConfiguration.class)
 //@EnableJpaRepositories("com.g31.demo.repository")
 public class GalaxiaConnectApplication implements CommandLineRunner {
-
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private UserRoleRepository userRoleRepository;
-
 	public static void main(String[] args) {
 		SpringApplication.run(GalaxiaConnectApplication.class, args);
 	}
 
+//	@Bean
+//	public PasswordEncoder passwordEncoder(){
+//		return new BCryptPasswordEncoder();
+//	}
 
 	/**
 	 * Initialize role repository and an admin.
@@ -38,19 +39,19 @@ public class GalaxiaConnectApplication implements CommandLineRunner {
 	 * @throws Exception
 	 */
 	@Override
-	public void run(String... args) throws Exception {
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		// initialize role repository
+	public void run(java.lang.String... args) {
+		//初始化角色信息
 		for (RoleType roleType : RoleType.values()) {
-//			System.out.println(roleType.getName() + roleType.getDescription());
 			roleRepository.save(new Role(roleType.getName(), roleType.getDescription()));
 		}
-		// initialize an admin account in user repository
-		AuditUser auditUser = AuditUser.builder().userName("root")
-				.password(bCryptPasswordEncoder.encode("root"))
-				.email("kevin@outlook.com").build();
-		userRepository.save(auditUser);
+		//初始化一个 admin 用户
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		User user = User.builder().enabled(true).fullName("admin").userName("root").password(bCryptPasswordEncoder.encode("root")).build();
+
+		userRepository.save(user);
 		Role role = roleRepository.findByName(RoleType.ADMIN.getName()).get();
-		userRoleRepository.save(new UserRole(auditUser, role));
+		userRoleRepository.save(new UserRole(user, role));
 	}
+
+
 }

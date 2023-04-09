@@ -3,24 +3,18 @@ package com.g31.demo.model;
 import lombok.Getter;
 
 /**
- * @Description:
+ * @author shuang.kou
  */
+
 @Getter
 public enum RoleType {
-
-    USER("User", ""),
-
-    ADMIN("Admin", "The admin.");
-
+    USER("USER", "Normal User"),
+    ADMIN("ADMIN", "Admin");
     private final String name;
     private final String description;
 
-    RoleType(String value, String description) {
-        this.name = value;
+    RoleType(String name, String description) {
+        this.name = name;
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

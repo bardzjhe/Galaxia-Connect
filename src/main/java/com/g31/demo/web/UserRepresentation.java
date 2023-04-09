@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @Description: A user can see other users' name.
+ * user representation format
  */
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserRepresentation {
     private String userName;
+    private String fullName;
 }

@@ -1,5 +1,6 @@
 package com.g31.demo.model;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,28 +12,25 @@ import java.util.Collection;
  * @Description:
  */
 public class JwtUser implements UserDetails {
-    private Long uid;
+
+    private Long id;
     private String username;
-    private String email;
     private String password;
     private Boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser() {}
+    public JwtUser() {
+    }
 
-
-    public JwtUser(AuditUser auditUser) {
-        this.uid = auditUser.getUid();
-        this.username = auditUser.getUserName();
-        this.password = auditUser.getPassword();
-        this.email = auditUser.getEmail();
-        // by default, it's enabled
-        if(auditUser.getEnabled() == null){
-            this.enabled = true;
-        }else{
-            this.enabled = auditUser.getEnabled();
-        }
-        this.authorities = auditUser.getAuthorities();
+    /**
+     * 通过 user 对象创建jwtUser
+     */
+    public JwtUser(User user) {
+        id = user.getId();
+        username = user.getUserName();
+        password = user.getPassword();
+        enabled = user.getEnabled() == null ? true : user.getEnabled();
+        authorities = user.getRoles();
     }
 
     @Override
@@ -48,10 +46,6 @@ public class JwtUser implements UserDetails {
     @Override
     public String getUsername() {
         return username;
-    }
-
-    public String getEmail(){
-        return email;
     }
 
     @Override
@@ -77,10 +71,11 @@ public class JwtUser implements UserDetails {
     @Override
     public String toString() {
         return "JwtUser{" +
-                "uid=" + uid +
+                "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", authorities=" + authorities +
                 '}';
     }
+
 }

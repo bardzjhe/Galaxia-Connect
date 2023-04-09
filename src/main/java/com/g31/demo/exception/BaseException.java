@@ -1,24 +1,18 @@
 package com.g31.demo.exception;
 
-import lombok.Getter;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: The custom exception should extend RuntimeException.
+ * @author shuang.kou
  */
-
-@Getter
-public class BaseException extends RuntimeException{
-
+abstract class BaseException extends RuntimeException {
     private final ErrorCode errorCode;
-
-    // transient keyword plays an important role to meet security constraints.
     private final transient HashMap<String, Object> data = new HashMap<>();
 
-    BaseException(ErrorCode errorCode, Map<String, Object> data) {
+    BaseException(ErrorCode errorCode, Map<String, String> data) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
         if (!ObjectUtils.isEmpty(data)) {
@@ -34,5 +28,12 @@ public class BaseException extends RuntimeException{
         }
     }
 
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
+    }
 
 }

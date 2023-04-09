@@ -26,7 +26,7 @@ const ChatRoom = () => {
     const onConnected = () => {
         setUserData({...userData,"connected": true});
         stompClient.subscribe('/chatroom/public', onMessageReceived);
-        stompClient.subscribe('/auditUser/'+userData.username+'/private', onPrivateMessage);
+        stompClient.subscribe('/user/'+userData.username+'/private', onPrivateMessage);
         userJoin();
     }
 
@@ -164,7 +164,7 @@ const ChatRoom = () => {
         :
         <div className="register">
             <input
-                id="auditUser-name"
+                id="user-name"
                 placeholder="Enter your name"
                 name="userName"
                 value={userData.username}

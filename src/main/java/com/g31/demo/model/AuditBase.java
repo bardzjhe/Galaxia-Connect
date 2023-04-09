@@ -1,6 +1,5 @@
 package com.g31.demo.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +15,9 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.Instant;
 
+/**
+ * @author shuang.kou
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

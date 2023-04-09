@@ -1,6 +1,8 @@
 package com.g31.demo.web;
 
-import com.g31.demo.model.AuditUser;
+
+import com.g31.demo.model.User;
+import com.g31.demo.validator.FullName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,28 +10,23 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @Description:
- *
- * http://localhost:8080/api/users/sign-up
- * {"userName":"123456","password":"123456", "email":"@outlook.com"}
+ * User register request format
  */
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-
     @NotBlank
     private String userName;
     @NotBlank
     private String password;
+    @FullName
     @NotBlank
-    private String email;
+    private String fullName;
 
-    public AuditUser toUser() {
-        return AuditUser.builder().userName(this.getUserName())
-                .email(this.getEmail())
+    public User toUser() {
+        return User.builder().fullName(this.getFullName())
+                .userName(this.getUserName())
                 .enabled(true).build();
-
     }
 }

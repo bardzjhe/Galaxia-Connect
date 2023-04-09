@@ -2,6 +2,7 @@ package com.g31.demo.controller;
 
 
 import com.g31.demo.model.Message;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -13,9 +14,10 @@ import org.springframework.stereotype.Controller;
  *
  */
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ChatController {
 
-    @Autowired
+
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/message")

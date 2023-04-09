@@ -15,16 +15,17 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @Description:for swagger/postman testing
+ * @description swagger configuration
  */
 @Configuration
 public class SwaggerConfig {
+
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-//                .apis(RequestHandlerSelectors.basePackage("github.com/RepublicHo/Galaxia-Connect"))
+//                .apis(RequestHandlerSelectors.basePackage("github.javaguide.springsecurityjwtguide"))
                 .paths(PathSelectors.any())
                 .build()
                 .securityContexts(securityContext())
@@ -52,7 +53,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring Security JWT Guide")
+                .title("Galaxia Connect API")
                 .build();
     }
+
 }
+
+

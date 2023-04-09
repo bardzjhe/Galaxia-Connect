@@ -1,23 +1,22 @@
 package com.g31.demo.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description:
+ * @author shuang.kou
  */
-
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "role")
-public class Role extends AuditBase{
+public class Role extends AuditBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

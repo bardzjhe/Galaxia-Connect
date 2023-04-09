@@ -7,7 +7,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.crypto.SecretKey;
 import javax.xml.bind.DatatypeConverter;
@@ -21,10 +20,15 @@ import java.util.stream.Collectors;
  */
 public class JwtTokenUtils {
 
+
+    /**
+     *
+     */
     private static final byte[] API_KEY_SECRET_BYTES = DatatypeConverter.parseBase64Binary(SecurityConst.JWT_SECRET_KEY);
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(API_KEY_SECRET_BYTES);
-    public static String createToken(String username, String id, List<String> roles, boolean rememberMe){
-        long expiration = rememberMe ? SecurityConst.EXPIRATION_TRUE_REMEMBER : SecurityConst.EXPIRATION_FALSE_REMEMBER;
+
+    public static String createToken(String username, String id, List<String> roles, boolean isRememberMe) {
+        long expiration = isRememberMe ? SecurityConst.EXPIRATION_REMEMBER : SecurityConst.EXPIRATION;
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
         String tokenPrefix = Jwts.builder()
@@ -37,10 +41,10 @@ public class JwtTokenUtils {
                 .setSubject(username)
                 .setExpiration(expirationDate)
                 .compact();
-        return SecurityConst.TOKEN_PREFIX + tokenPrefix;
+        return SecurityConst.TOKEN_PREFIX + tokenPrefix; // 添加 token 前缀 "Bearer ";
     }
 
-    public static String getId(String token){
+    public static String getId(String token) {
         Claims claims = getClaims(token);
         return claims.getId();
     }
@@ -51,12 +55,14 @@ public class JwtTokenUtils {
         String userName = claims.getSubject();
         return new UsernamePasswordAuthenticationToken(userName, token, authorities);
     }
+
     private static List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
         String role = (String) claims.get(SecurityConst.ROLE_CLAIMS);
         return Arrays.stream(role.split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
     private static Claims getClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)

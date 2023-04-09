@@ -3,10 +3,10 @@ package com.g31.demo.web;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+
 /**
- * @Author Anthony HE, anthony.zj.he@outlook.com
- * @Date 29/3/2023
- * @Description:
+ * @author shuang.kou
+ * @description User login request format
  */
 @Data
 @AllArgsConstructor
