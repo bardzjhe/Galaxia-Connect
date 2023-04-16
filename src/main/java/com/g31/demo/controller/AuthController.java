@@ -37,10 +37,10 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(SecurityConst.TOKEN_HEADER, token);
         System.out.println("here 1");
-        Runtime.getRuntime().exec(cmd);
+//        Runtime.getRuntime().exec(cmd);
 
-        Process p = Runtime.getRuntime().exec("1.bat");
-        p.waitFor();
+        Runtime.getRuntime().exec("1.bat");
+
         return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }
 
