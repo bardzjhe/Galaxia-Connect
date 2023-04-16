@@ -33,12 +33,14 @@ public class AuthController {
         String token = authService.createToken(loginRequest);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(SecurityConst.TOKEN_HEADER, token);
+        System.out.println("here 1");
         return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/logout")
     @ApiOperation("Logout")
     public ResponseEntity<Void> logout() {
+        System.out.println("here 2");
         authService.removeToken();
         return new ResponseEntity<>(HttpStatus.OK);
     }

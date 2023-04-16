@@ -41,6 +41,7 @@ public class JwtTokenUtils {
                 .setSubject(username)
                 .setExpiration(expirationDate)
                 .compact();
+        System.out.println(tokenPrefix);
         return SecurityConst.TOKEN_PREFIX + tokenPrefix; // 添加 token 前缀 "Bearer ";
     }
 

@@ -7,7 +7,7 @@ import com.g31.demo.filter.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpMethod;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,9 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
 
 import java.util.Arrays;
 
@@ -31,10 +29,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
  **/
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableWebSocketMessageBroker
+
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter
-        implements WebSocketMessageBrokerConfigurer {
+        {
 
     private final StringRedisTemplate stringRedisTemplate;
 
@@ -74,18 +72,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .accessDeniedHandler(new JwtAccessDeniedHandler());
         // 防止H2 web 页面的Frame 被拦截
         http.headers().frameOptions().disable();
-    }
-
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/chatroom","/user");
-        registry.setUserDestinationPrefix("/user");
     }
 
     /**

@@ -2,7 +2,7 @@ package com.g31.demo.web;
 
 
 import com.g31.demo.model.User;
-import com.g31.demo.validator.FullName;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,6 @@ public class RegisterRequest {
     private String userName;
     @NotBlank
     private String password;
-    @FullName
     @NotBlank
     private String fullName;
 
