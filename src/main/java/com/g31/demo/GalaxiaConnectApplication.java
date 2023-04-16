@@ -13,6 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.IOException;
+
 
 //@ComponentScan//(basePackages = {"com.g31.demo.repository", "com.g31.demo.controller", "com.g31.demo.service"})
 @SpringBootApplication//(exclude = SecurityAutoConfiguration.class)
@@ -24,7 +26,12 @@ public class GalaxiaConnectApplication implements CommandLineRunner {
 	private UserRepository userRepository;
 	@Autowired
 	private UserRoleRepository userRoleRepository;
-	public static void main(String[] args) {
+
+
+	private static final String[] cmd = {"cmd", "node", "./galaxy/server.js "};
+	public static void main(String[] args) throws IOException, InterruptedException {
+
+
 		SpringApplication.run(GalaxiaConnectApplication.class, args);
 	}
 
@@ -39,7 +46,9 @@ public class GalaxiaConnectApplication implements CommandLineRunner {
 	 * @throws Exception
 	 */
 	@Override
-	public void run(java.lang.String... args) {
+	public void run(java.lang.String... args) throws IOException  {
+
+
 		//初始化角色信息
 		for (RoleType roleType : RoleType.values()) {
 			roleRepository.save(new Role(roleType.getName(), roleType.getDescription()));

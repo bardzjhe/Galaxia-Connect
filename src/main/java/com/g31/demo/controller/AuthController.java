@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 /**
  * @author shuang.kou
  * @description 认证授权
@@ -26,14 +28,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final String[] cmd = {"cmd", "/resources/galaxy/", "node server.js"};
 
     @PostMapping("/login")
     @ApiOperation("Login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) throws IOException, InterruptedException {
         String token = authService.createToken(loginRequest);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(SecurityConst.TOKEN_HEADER, token);
         System.out.println("here 1");
+        Runtime.getRuntime().exec(cmd);
+
+        Process p = Runtime.getRuntime().exec("1.bat");
+        p.waitFor();
         return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }
 
