@@ -21,10 +21,10 @@ public class RegisterRequest {
     @NotBlank
     private String password;
     @NotBlank
-    private String fullName;
+    private String email;
 
     public User toUser() {
-        return User.builder().fullName(this.getFullName())
+        return User.builder().email(this.getEmail())
                 .userName(this.getUserName())
                 .enabled(true).build();
     }

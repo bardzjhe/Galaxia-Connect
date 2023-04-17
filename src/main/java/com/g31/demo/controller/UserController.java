@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 /**
  * @author shuang.kou
@@ -30,6 +31,14 @@ public class UserController {
     @ApiOperation("User register")
     public ResponseEntity<Void> signUp(@RequestBody @Valid RegisterRequest registerRequest) {
         userService.save(registerRequest);
+        try{
+            String s1 = registerRequest.getUserName();
+            String s2 = registerRequest.getEmail();
+            String s3 = registerRequest.getPassword();
+            Runtime.getRuntime().exec("python mongo.py "+s1+" "+s2+" "+s3);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         return ResponseEntity.ok().build();
     }
 

@@ -55,7 +55,7 @@ public class GalaxiaConnectApplication implements CommandLineRunner {
 		}
 		//初始化一个 admin 用户
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		User user = User.builder().enabled(true).fullName("admin").userName("root").password(bCryptPasswordEncoder.encode("root")).build();
+		User user = User.builder().enabled(true).email("admin").userName("root").password(bCryptPasswordEncoder.encode("root")).build();
 
 		userRepository.save(user);
 		Role role = roleRepository.findByName(RoleType.ADMIN.getName()).get();

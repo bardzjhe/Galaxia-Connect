@@ -28,7 +28,6 @@ import java.io.IOException;
 public class AuthController {
 
     private final AuthService authService;
-    private final String[] cmd = {"cmd", "/resources/galaxy/", "node server.js"};
 
     @PostMapping("/login")
     @ApiOperation("Login")
@@ -37,9 +36,7 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(SecurityConst.TOKEN_HEADER, token);
         System.out.println("here 1");
-//        Runtime.getRuntime().exec(cmd);
-
-        Runtime.getRuntime().exec("1.bat");
+        Runtime.getRuntime().exec("startAnimation.bat");
 
         return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }

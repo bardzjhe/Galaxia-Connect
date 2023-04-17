@@ -17,6 +17,6 @@ public class UpdateRequest {
     @NotBlank
     private String userName;
     private String password;
-    private String fullName;
+    private String email;
     private Boolean enabled;
 }

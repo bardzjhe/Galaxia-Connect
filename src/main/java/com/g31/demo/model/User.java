@@ -33,7 +33,7 @@ public class User extends AuditBase {
     @Column(nullable = false)
     private String userName;
     @Column(nullable = false)
-    private String fullName;
+    private String email;
     @Column(nullable = false)
     private String password;
     @Column(columnDefinition = "tinyint(1) default 1")
@@ -51,7 +51,7 @@ public class User extends AuditBase {
     }
 
     public UserRepresentation toUserRepresentation() {
-        return UserRepresentation.builder().fullName(this.fullName)
+        return UserRepresentation.builder().email(this.email)
                 .userName(this.userName).build();
     }
 

@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserRepresentation {
     private String userName;
-    private String fullName;
+    private String email;
 }

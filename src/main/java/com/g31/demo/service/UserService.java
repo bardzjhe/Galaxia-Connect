@@ -56,8 +56,8 @@ public class UserService {
 
     public void update(UpdateRequest updateRequest) {
         User user = find(updateRequest.getUserName());
-        if (Objects.nonNull(updateRequest.getFullName())) {
-            user.setFullName(updateRequest.getFullName());
+        if (Objects.nonNull(updateRequest.getEmail())) {
+            user.setEmail(updateRequest.getEmail());
         }
         if (Objects.nonNull(updateRequest.getPassword())) {
             user.setPassword(bCryptPasswordEncoder.encode(updateRequest.getPassword()));
