@@ -22,7 +22,12 @@ For more information about how to get started on redis, please refer to [link](h
 If you are using Windows, you are suggested to download Redis-x64-5.0.14.1.msi from [link](https://github.com/tporadowski/redis/releases) 
 and add redis folder to the PATH environment variables accordingly. (If you find any bugs with related to redis in the console
 after running the program, it indicates that you didn't configure Redis properly). 
-
+3. Connecting MongoDB requires the python package "pymongo". Run 
+ ```bash
+   pip install pymongo
+   ```
+   to install the package if you have not done so.
+   
 4. **There is no need when you test the code since by default no password needed. Configure Redis password if needed in the future.**
 
     + open `src/main/resources/application.properties` file.
