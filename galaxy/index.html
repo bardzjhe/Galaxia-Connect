@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
 	<meta charset="utf-8">
 	<title>Galaxia</title>
@@ -9,7 +7,6 @@
 	
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-
 	
 	<script type="text/javascript" src="libs/jquery-1.12.4.min.js"></script>
 
@@ -39,20 +36,58 @@
 	<script type="text/javascript" src="js/movie_script/test.js"></script>
 
 
+	<style>
+		.buttonGrp {
+			margin-top: 10px;
+			padding: 10px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
 
+		.buttonGrp #fullScreen, .buttonGrp #edit, .buttonGrp #start, .buttonGrp #pause{
+			background-color: #033e6b;
+			margin-bottom: 10px;
+			padding-bottom: 2.5rem;
+		}
 
-	
+		.buttonGrp #fullScreen{
+			margin-left: 1rem;
+		}
 
-	
+		.buttonGrp #edit{
+			margin-left: 7rem;
+		}
+
+		.buttonGrp #start{
+			margin-left: 2rem;
+		}
+
+		.buttonGrp #pause{
+			margin-left: 1rem;
+		}
+	</style>
 </head>
 
 <body style="background-color: #000">
 	<p style="color: #00ddff" id="timezone">00:00:00</p>
 
-	<button id="fullScreen" onclick="fullScreen()">Full Screen</button>
-	<button id="edit" data-toggle="modal" data-target="#myModal">Edit</button>
-	<button id="start" onclick="start()">Start</button>
-	<button id="pause" onclick="pause()">Pause</button>
+	<div class="container-fluid">
+		<div class="row buttonGrp">
+			<div class="col-xs-3">
+				<button id="fullScreen" onclick="fullScreen()" class="btn btn-primary">Full Screen</button>
+			</div>
+			<div class="col-xs-3">
+				<button id="edit" data-toggle="modal" data-target="#myModal" class="btn btn-primary">Edit</button>
+			</div>
+			<div class="col-xs-3">
+				<button id="start" onclick="start()" class="btn btn-primary">Start</button>
+			</div>
+			<div class="col-xs-3">
+				<button id="pause" onclick="pause()" class="btn btn-primary">Pause</button>
+			</div>
+		</div>
+	</div>
 
 	<div id="viewport"></div>
 	<!-- Modal -->
@@ -74,101 +109,9 @@
 	  </div>
 	</div>
 </body>
+
 <script type="text/javascript">
-	Physijs.scripts.worker = './libs/physijs_worker.js';
-	Physijs.scripts.ammo = './ammo.js';
-
-	
-
-	var world
-	var orbitcontrols
-	var simData=''
-	var mainScene
-	// window.onload = function(){
-		
-	
-
-	// }
-	function onWindowResize() {
-		world.scene.onWindowResize()
-		
-	}
-	function createUIControls(scene){
-		orbitcontrols = new THREE.OrbitControls(scene.camera,scene.renderer.domElement);
-		orbitcontrols.target = new THREE.Vector3(0, 0, 0);
-		orbitcontrols.autoRotate = false;
-		clock = new THREE.Clock();
-	}
-	var simDataName = getSimDataName()
-	var dataLoader = new DataLoader()
-	dataLoader.loadSimData(simDataName,function(data){
-
-		simData = JSON.stringify(data, null, "\t")
-		$("#simData").val(simData)	
-
-	})
-	function start(){
-		if(simData == undefined){
-			alert('Illegal parameter:')
-			return
-		}
-		try{
-			world = new World()
-			world.start(function(scene){
-				mainScene = scene
-				createUIControls(scene)
-				action()
-
-			},JSON.parse(simData))
-		}catch(e){
-			alert('Illegal parameter:'+e)
-
-		}	
-	}
-	function pause(){
-		world.runing=!world.runing
-		if(world.runing){
-			mainScene.scene.simulate( undefined, 1);
-			$('#pause').text("Pause")
-
-		}else{
-			$('#pause').text("Continue")
-		}
-	}
-	window.addEventListener( 'resize', onWindowResize, false );
-
-	//全屏
-	function fullScreen(){
-	    var el = document.documentElement;
-	    var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
-
-	    //typeof rfs != "undefined" && rfs
-	    if (rfs) {
-	        rfs.call(el);
-	    }
-	    else if (typeof window.ActiveXObject !== "undefined") {
-	        //for IE，这里其实就是模拟了按下键盘的F11，使浏览器全屏
-	        var wscript = new ActiveXObject("WScript.Shell");
-	        if (wscript != null) {
-	            wscript.SendKeys("{F11}");
-	        }
-	    }
-	}
-	function saveData(){
-		try{
-			if(JSON.parse($("#simData").val())==undefined){
-				alert('Illegal parameter!')
-				return
-			}
-			simData = $("#simData").val()
-			$.cookie('sim_data', simData, { expires: 365 });
-			
-
-
-		}catch (e){
-			alert('Illegal parameter!')
-		}
-	}
+	// your script goes here
 </script>
 
 </html>
