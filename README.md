@@ -1,13 +1,20 @@
 # Galaxia-Connect
-The name combines "Galaxia," a word derived from the Greek word for galaxy, and "Connect," to indicate the ability to communicate and engage with others. 
 
-Galaxia Connect means this program is designed to connect people interested in learning about the universe in an interactive way. The software could offer features such as forums, chat rooms, educational resources, and interactive tools to enhance the learning experience. The platform could foster collaboration and encourage meaningful discussions about various aspects of the universe, from space exploration and astrophysics to the cultural and philosophical aspects of our relationship with the cosmos
+## Introduction
+The name combines "Galaxia", a word derived from the Greek word for galaxy, and "Connect" to indicate the ability to communicate and engage with others.
+Galaxia Connect means this program is designed to connect people interested in learning about the universe in an interactive way. The software could offer features such as forums, chat rooms, educational resources, and interactive tools to enhance the learning experience. The platform could foster collaboration and encourage meaningful discussions about various aspects of the universe, from space exploration and astrophysics to the cultural and philosophical aspects of our relationship with the cosmos.
 
-Security Analysis Report URL:
-https://connectpolyu.sharepoint.com/:w:/r/sites/GRP_Security_G31/Shared%20Documents/General/Security%20Analysis%20Report.docx?d=w46ec864a4d754f95a96e71e706d47df9&csf=1&web=1&e=6ZJVSI
+## Prerequisites
+1. JDK 17
+2. Node 18 (Galaxy educational demo backend).
+3. Python 3.6
+4. Redis for caching(Without Redis, the program cannot run properly.
+   For more information about how to get started on redis, please refer to [link](https://tableplus.com/blog/2018/10/how-to-start-stop-restart-redis.html).
+   If you are using Windows, you are suggested to download Redis-x64-5.0.14.1.msi from [link](https://github.com/tporadowski/redis/releases)
+   and add redis folder to the PATH environment variables accordingly. (If you find any bugs with related to redis in the console
+   after running the program, it indicates that you didn't configure Redis properly). )
+5. MongoDB.
 
-
-reference: https://blog.csdn.net/allway2/article/details/122702532?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522168041294216800184110150%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=168041294216800184110150&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-11-122702532-null-null.142^v80^wechat_v2,201^v4^add_ask,239^v2^insert_chatgpt&utm_term=table%20not%20found%20h2&spm=1018.2226.3001.4187
 
 ## Steps to set up this project
 1. **Clone the application**
@@ -15,28 +22,29 @@ reference: https://blog.csdn.net/allway2/article/details/122702532?ops_request_m
    ```bash
    git clone https://github.com/RepublicHo/Galaxia-Connect
    ```
++ clone the front-end, please refer to [Link](https://github.com/lucascheng24/galaxia-interface)
++ clone the forum, please refer to [Link](https://github.com/lucascheng24/COMP3334-Discussion-forum)
 
-2. **No more MySQL. But please download Redis for caching purposes.** 
-+ Without Redis, the program cannot run properly. 
-For more information about how to get started on redis, please refer to [link](https://tableplus.com/blog/2018/10/how-to-start-stop-restart-redis.html).
-If you are using Windows, you are suggested to download Redis-x64-5.0.14.1.msi from [link](https://github.com/tporadowski/redis/releases) 
-and add redis folder to the PATH environment variables accordingly. (If you find any bugs with related to redis in the console
-after running the program, it indicates that you didn't configure Redis properly). 
-3. Connecting MongoDB requires the python package "pymongo". Run 
+2. Connecting MongoDB requires the python package "pymongo". Run 
  ```bash
    pip install pymongo
    ```
    to install the package if you have not done so.
-   
-4. **There is no need when you test the code since by default no password needed. Configure Redis password if needed in the future.**
+ 
+3. **This step is not necessary when you run the code since by default no password needed. You can configure Redis password if needed in the future.**
 
-    + open `src/main/resources/application.properties` file.
+    + open `src/main/resources/application.yaml` file.
 
     + change `spring.redis.password` properties as per your redis.conf file. 
 
-5. **Run the app**
+4. **Run the app**
 
    You can run the spring boot app by typing the following command -
+   Server (Intellij is suggested):
+
+   ```bash
+   mvn spring-boot:run
+   ```   
    
    Client:
    ```bash
@@ -44,22 +52,14 @@ after running the program, it indicates that you didn't configure Redis properly
    npm start
    ```
    
-   Server:
-   ```bash
-   mvn spring-boot:run
-   ```   
+   
    Run the client first and then the server, enter the correct user name and password to start using.
    
    The server will start on port 8080.
 
 
-## Demo
+## Reference:
 
-1. Successfully register a normal user account. In this application, admin is pre-registered
-and cannot register an admin in rest API.
-![img.png](img.png)
-2. Successfully login. 
-![img_1.png](img_1.png)
+1. Universe demo. [Link](https://github.com/KikiLetGo/UniverseSim)
 
-and we can find the JWT Bear authentication value in the header. 
-![img_2.png](img_2.png)
+
