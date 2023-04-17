@@ -111,7 +111,101 @@
 </body>
 
 <script type="text/javascript">
-	// your script goes here
+<!--	// your script goes here-->
+	Physijs.scripts.worker = './libs/physijs_worker.js';
+	Physijs.scripts.ammo = './ammo.js';
+
+
+
+	var world
+	var orbitcontrols
+	var simData=''
+	var mainScene
+	// window.onload = function(){
+
+
+
+	// }
+	function onWindowResize() {
+		world.scene.onWindowResize()
+
+	}
+	function createUIControls(scene){
+		orbitcontrols = new THREE.OrbitControls(scene.camera,scene.renderer.domElement);
+		orbitcontrols.target = new THREE.Vector3(0, 0, 0);
+		orbitcontrols.autoRotate = false;
+		clock = new THREE.Clock();
+	}
+	var simDataName = getSimDataName()
+	var dataLoader = new DataLoader()
+	dataLoader.loadSimData(simDataName,function(data){
+
+		simData = JSON.stringify(data, null, "\t")
+		$("#simData").val(simData)
+
+	})
+	function start(){
+		if(simData == undefined){
+			alert('Illegal parameter:')
+			return
+		}
+		try{
+			world = new World()
+			world.start(function(scene){
+				mainScene = scene
+				createUIControls(scene)
+				action()
+
+			},JSON.parse(simData))
+		}catch(e){
+			alert('Illegal parameter:'+e)
+
+		}
+	}
+	function pause(){
+		world.runing=!world.runing
+		if(world.runing){
+			mainScene.scene.simulate( undefined, 1);
+			$('#pause').text("Pause")
+
+		}else{
+			$('#pause').text("Continue")
+		}
+	}
+	window.addEventListener( 'resize', onWindowResize, false );
+
+	//全屏
+	function fullScreen(){
+	    var el = document.documentElement;
+	    var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
+
+	    //typeof rfs != "undefined" && rfs
+	    if (rfs) {
+	        rfs.call(el);
+	    }
+	    else if (typeof window.ActiveXObject !== "undefined") {
+	        //for IE，这里其实就是模拟了按下键盘的F11，使浏览器全屏
+	        var wscript = new ActiveXObject("WScript.Shell");
+	        if (wscript != null) {
+	            wscript.SendKeys("{F11}");
+	        }
+	    }
+	}
+	function saveData(){
+		try{
+			if(JSON.parse($("#simData").val())==undefined){
+				alert('Illegal parameter!')
+				return
+			}
+			simData = $("#simData").val()
+			$.cookie('sim_data', simData, { expires: 365 });
+
+
+
+		}catch (e){
+			alert('Illegal parameter!')
+		}
+	}
 </script>
 
 </html>

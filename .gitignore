@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+react-client/node_modules/
