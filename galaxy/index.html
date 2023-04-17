@@ -4,7 +4,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>三体演化模拟</title>
+	<title>Galaxia</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
@@ -49,10 +49,10 @@
 <body style="background-color: #000">
 	<p style="color: #00ddff" id="timezone">00:00:00</p>
 
-	<button id="fullScreen" onclick="fullScreen()">全屏</button>
-	<button id="edit" data-toggle="modal" data-target="#myModal">编辑</button>
-	<button id="start" onclick="start()">开始模拟</button>
-	<button id="pause" onclick="pause()">暂停</button>
+	<button id="fullScreen" onclick="fullScreen()">Full Screen</button>
+	<button id="edit" data-toggle="modal" data-target="#myModal">Edit</button>
+	<button id="start" onclick="start()">Start</button>
+	<button id="pause" onclick="pause()">Pause</button>
 
 	<div id="viewport"></div>
 	<!-- Modal -->
@@ -61,14 +61,14 @@
 	    <div style="background-color: #33000000" class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 style="color: #00ddff" class="modal-title" id="myModalLabel">编辑参数</h4>
+	        <h4 style="color: #00ddff" class="modal-title" id="myModalLabel">Edit</h4>
 	      </div>
 	      <div class="modal-body" style="background-color: #33333333">
 	        <textarea id="simData" style="background-color: #33333333" class="form-control" rows="20"></textarea>
 	      </div>
 	      <div class="modal-footer">
-	        <button style="color: #00ddff;background-color: #ffffff" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-	        <button onclick="saveData()" style="background-color: #00ddff" type="button" class="btn btn-primary" data-dismiss="modal">保存参数</button>
+	        <button style="color: #00ddff;background-color: #ffffff" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button onclick="saveData()" style="background-color: #00ddff" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
 	      </div>
 	    </div>
 	  </div>
@@ -109,7 +109,7 @@
 	})
 	function start(){
 		if(simData == undefined){
-			alert('数据非法')
+			alert('Illegal parameter:')
 			return
 		}
 		try{
@@ -121,7 +121,7 @@
 
 			},JSON.parse(simData))
 		}catch(e){
-			alert('数据非法:'+e)
+			alert('Illegal parameter:'+e)
 
 		}	
 	}
@@ -129,10 +129,10 @@
 		world.runing=!world.runing
 		if(world.runing){
 			mainScene.scene.simulate( undefined, 1);
-			$('#pause').text("暂停")
+			$('#pause').text("Pause")
 
 		}else{
-			$('#pause').text("继续")
+			$('#pause').text("Continue")
 		}
 	}
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -157,7 +157,7 @@
 	function saveData(){
 		try{
 			if(JSON.parse($("#simData").val())==undefined){
-				alert('数据非法')
+				alert('Illegal parameter!')
 				return
 			}
 			simData = $("#simData").val()
@@ -166,7 +166,7 @@
 
 
 		}catch (e){
-			alert('数据非法')
+			alert('Illegal parameter!')
 		}
 	}
 </script>

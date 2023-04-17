@@ -6,22 +6,22 @@ package com.g31.demo.common;
 public final class SecurityConst {
 
     /**
-     * 角色的key
+     * key for role (user, admin)
      **/
     public static final String ROLE_CLAIMS = "rol";
 
     /**
-     * rememberMe 为 false 的时候过期时间是1个小时
+     * if rememberMe is false, the expiration time is 1 hour
      */
     public static final long EXPIRATION = 60 * 60L;
 
     /**
-     * rememberMe 为 true 的时候过期时间是7天
+     * rememberMe is true, the expiration time is 7 days.
      */
     public static final long EXPIRATION_REMEMBER = 60 * 60 * 24 * 7L;
 
     /**
-     * JWT签名密钥硬编码到应用程序代码中，应该存放在环境变量或.properties文件中。
+     * The JWT signing key is hardcoded into the application code and should be stored in an environment variable or .properties file.
      */
     public static final String JWT_SECRET_KEY = "C*F-JaNdRgUkXn2r5u8x/A?D(G+KbPeShVmYq3s6v9y$B&E)H@McQfTjWnZr4u7w";
 
