@@ -60,7 +60,7 @@ Galaxia Connect means this program is designed to connect people interested in l
 ## Database 
 
 You can check user information at H2 database (http://localhost:8080/api/h2-console) 
-Login with username:root and password 123456. 
+Login with username:root and password 123456. The user information will be storing in MongoDB as well. 
 
 ![img_3.png](img_3.png)
 
