@@ -57,6 +57,15 @@ Galaxia Connect means this program is designed to connect people interested in l
    The server will start on port 8080.
 
 
+## Database 
+
+You can check user information at H2 database (http://localhost:8080/api/h2-console) 
+Login with username:root and password 123456. 
+
+![img_3.png](img_3.png)
+
+
+
 ## Reference:
 
 1. Universe demo. [Link](https://github.com/KikiLetGo/UniverseSim)
