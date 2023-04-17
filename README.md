@@ -51,10 +51,9 @@ Galaxia Connect means this program is designed to connect people interested in l
    npm install (in the react-client folder)
    npm start
    ```
-   
-   
-   Run the client first and then the server, enter the correct user name and password to start using.
-   
+
+   Run the server first then the client.
+   The client will start on port 3000. 
    The server will start on port 8080.
 
 
