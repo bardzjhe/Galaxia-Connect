@@ -8,11 +8,11 @@ Galaxia Connect means this program is designed to connect people interested in l
 1. JDK 17
 2. Node 18 (Galaxy educational demo backend).
 3. Python 3.6
-4. Redis for caching(Without Redis, the program cannot run properly.
+4. Redis for caching. Without Redis, the program cannot run properly.
    For more information about how to get started on redis, please refer to [link](https://tableplus.com/blog/2018/10/how-to-start-stop-restart-redis.html).
    If you are using Windows, you are suggested to download Redis-x64-5.0.14.1.msi from [link](https://github.com/tporadowski/redis/releases)
    and add redis folder to the PATH environment variables accordingly. (If you find any bugs with related to redis in the console
-   after running the program, it indicates that you didn't configure Redis properly). )
+   after running the program, it indicates that you didn't configure Redis properly).
 5. MongoDB.
 
 

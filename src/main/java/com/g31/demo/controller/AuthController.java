@@ -19,7 +19,7 @@ import java.io.IOException;
 
 /**
  * @author shuang.kou
- * @description 认证授权
+ * @description authentication controller
  **/
 @RestController
 @RequestMapping("/auth")

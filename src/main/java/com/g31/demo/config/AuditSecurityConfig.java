@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /**
  * @author shuang.kou
- * @description 审计功能配置类
+ * @description Auditing purpose
  */
 @Configuration
 @EnableJpaAuditing

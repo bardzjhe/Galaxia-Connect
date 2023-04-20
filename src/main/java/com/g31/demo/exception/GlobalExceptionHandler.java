@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * @author shuang.kou
- */
+
 @ControllerAdvice
 @ResponseBody
 @Slf4j
