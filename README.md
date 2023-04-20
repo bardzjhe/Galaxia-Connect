@@ -1,4 +1,6 @@
 # Galaxia-Connect
+
+Demo:
 ![img.png](img.png)
 ## Introduction
 The name combines "Galaxia", a word derived from the Greek word for galaxy, and "Connect" to indicate the ability to communicate and engage with others.
@@ -7,7 +9,7 @@ The software could offer features such as forums, chat rooms, educational resour
 The platform could foster collaboration and encourage meaningful discussions about various aspects of the universe, from space exploration and astrophysics to the cultural and philosophical aspects of our relationship with the cosmos.
 
 ## Prerequisites
-1. JDK 17
+1. JDK 17 
 2. Node 18 (Galaxy educational demo backend).
 3. Python 3.6
 4. Redis for caching. Without Redis, the program cannot run properly.
@@ -15,7 +17,7 @@ The platform could foster collaboration and encourage meaningful discussions abo
    If you are using Windows, you are suggested to download Redis-x64-5.0.14.1.msi from [link](https://github.com/tporadowski/redis/releases)
    and add redis folder to the PATH environment variables accordingly. (If you find any bugs with related to redis in the console
    after running the program, it indicates that you didn't configure Redis properly).
-5. MongoDB.
+5. MongoDB (for the advanced version).
 
 
 ## Steps to set up this project
@@ -67,7 +69,9 @@ Login with username:root and password:123456. The user information will be stori
 
 ![img_3.png](img_3.png)
 
+## License
 
+This project is licensed under the MIT License. 
 
 ## Reference:
 

@@ -18,7 +18,8 @@ import java.io.IOException;
 
 /**
  * @author shuang.kou
- * @description 过滤器处理所有HTTP请求，并检查是否存在带有正确令牌的Authorization标头。例如，如果令牌未过期或签名密钥正确。
+ * @description: The filter processes all HTTP requests and checks for the presence of an Authorization header with the correct token.
+ * For example, if the token has not expired or the signing key is correct.
  */
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
