@@ -2,7 +2,9 @@
 ![img.png](img.png)
 ## Introduction
 The name combines "Galaxia", a word derived from the Greek word for galaxy, and "Connect" to indicate the ability to communicate and engage with others.
-Galaxia Connect means this program is designed to connect people interested in learning about the universe in an interactive way. The software could offer features such as forums, chat rooms, educational resources, and interactive tools to enhance the learning experience. The platform could foster collaboration and encourage meaningful discussions about various aspects of the universe, from space exploration and astrophysics to the cultural and philosophical aspects of our relationship with the cosmos.
+Galaxia Connect means this program is designed to connect people interested in learning about the universe in an interactive way. 
+The software could offer features such as forums, chat rooms, educational resources, and interactive tools to enhance the learning experience. 
+The platform could foster collaboration and encourage meaningful discussions about various aspects of the universe, from space exploration and astrophysics to the cultural and philosophical aspects of our relationship with the cosmos.
 
 ## Prerequisites
 1. JDK 17
@@ -23,7 +25,8 @@ Galaxia Connect means this program is designed to connect people interested in l
    git clone https://github.com/RepublicHo/Galaxia-Connect
    ```
 + clone the front-end, please refer to [Link](https://github.com/lucascheng24/galaxia-interface)
-+ clone the forum, please refer to [Link](https://github.com/lucascheng24/COMP3334-Discussion-forum)
+
++ As for the advanced version of the program, please clone the forum, refer to [Link](https://github.com/lucascheng24/COMP3334-Discussion-forum)
 
 2. Connecting MongoDB requires the python package "pymongo". Run 
  ```bash
@@ -60,7 +63,7 @@ Galaxia Connect means this program is designed to connect people interested in l
 ## Database 
 
 You can check user information at H2 database (http://localhost:8080/api/h2-console) 
-Login with username:root and password 123456. The user information will be storing in MongoDB as well. 
+Login with username:root and password:123456. The user information will be storing in MongoDB as well. 
 
 ![img_3.png](img_3.png)
 
